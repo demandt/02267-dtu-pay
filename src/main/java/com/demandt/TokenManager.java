@@ -73,16 +73,6 @@ public class TokenManager
         return instance;
     }
 
-    private static TokenManager instance = null;
-    private ArrayList<UUID> unusedTokens;
-    private ArrayList<UUID> usedTokens;
-    private ArrayList<UUID> generatedTokens;
-
-    public void useToken(UUID token)
-    {
-
-    }
-
     public boolean checkTokenHasNotBeenUsed(UUID token)
     {
         return unusedTokens.contains(token);
@@ -96,5 +86,20 @@ public class TokenManager
     public boolean approveUseOfToken(UUID token)
     {
         return checkTokenHasNotBeenUsed(token) && checkTokenIsValid(token);
+    }
+
+    private static TokenManager instance = null;
+    private ArrayList<UUID> unusedTokens;
+    private ArrayList<UUID> usedTokens;
+    private ArrayList<UUID> generatedTokens;
+
+    public void useToken(UUID token)
+    {
+        usedTokens.add(token);
+    }
+
+    public ArrayList<UUID> getUsedTokens()
+    {
+        return usedTokens;
     }
 }

@@ -10,3 +10,5 @@ Feature: Use a token
     When  the token has not been used
     And   the token is known to the system
     Then  the usage of that token is granted
+    Then  the token is used
+    Then  checks that the token has been added to the list of used tokens

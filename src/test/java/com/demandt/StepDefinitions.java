@@ -66,8 +66,6 @@ public class StepDefinitions
     {
         customer = new Customer("TestCustomer");
         TokenManager.getInstance().issueToken(customer, 6);
-        UUID token = customer.getTokens().get(0);
-        TokenManager.getInstance().useToken(token);
     }
 
     @When("the token has not been used")
@@ -89,5 +87,19 @@ public class StepDefinitions
     {
         UUID token = customer.getTokens().get(0);
         assertTrue(TokenManager.getInstance().approveUseOfToken(token));
+    }
+
+    @Then("the token is used")
+    public void the_token_is_used()
+    {
+        UUID token = customer.getTokens().get(0);
+        TokenManager.getInstance().useToken(token);
+    }
+
+    @Then("checks that the token has been added to the list of used tokens")
+    public void checks_that_the_token_has_been_added_to_the_list_of_used_tokens()
+    {
+        UUID token = customer.getTokens().get(0);
+        assertTrue(TokenManager.getInstance().getUsedTokens().contains(token));
     }
 }
