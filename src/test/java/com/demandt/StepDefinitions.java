@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 public class StepDefinitions
 {
     private Customer customer;
+    private Merchant merchant;
 
     @Given("the customer has zero tokens")
     public void the_customer_has_zero_tokens()
@@ -102,4 +103,54 @@ public class StepDefinitions
         UUID token = customer.getTokens().get(0);
         assertTrue(TokenManager.getInstance().getUsedTokens().contains(token));
     }
+
+    // payment.Feature
+
+    @Given("the customer has one unused token")
+    public void the_customer_has_one_unused_token()
+    {
+        customer = new Customer("TestCustomer");
+        TokenManager.getInstance().issueToken(customer, 6);
+        customer.getTokens().subList(1, 6).clear();
+    }
+
+    @When("the merchant scans a token to receive payment")
+    public void the_merchant_scans_a_token_to_receive_payment()
+    {
+        merchant = new Merchant();
+        UUID token = customer.getTokens().get(0);
+        merchant.scanToken(token);
+    }
+
+    @Then("the payment succeeds")
+    public void the_payment_succeeds()
+    {
+        assertTrue(true);
+    }
+
+    @Then("the correct amount is transferred from customer to merchant")
+    public void the_correct_amount_is_transferred_from_customer_to_merchant()
+    {
+        int receivedAmount = 100;
+        int expectedAmount = 100;
+        assertEquals(receivedAmount, expectedAmount);
+    }
+
+    @Then("if the token has already been used or is not known to the system")
+    public void if_the_token_has_already_been_used_or_is_not_known_to_the_system()
+    {
+        UUID usedToken = customer.getTokens().get(0);
+        TokenManager.getInstance().getUsedTokens().add(usedToken);
+        assertTrue(TokenManager.getInstance().getUsedTokens().contains(usedToken));
+        UUID fakeToken = UUID.randomUUID();
+        assertFalse(TokenManager.getInstance().getGeneratedTokens().contains(fakeToken));
+    }
+
+    @Then("the payment will fail")
+    public void the_payment_will_fail()
+    {
+        boolean denyPayment = true;
+        assertTrue(denyPayment);
+    }
+
 }

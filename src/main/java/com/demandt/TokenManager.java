@@ -43,6 +43,11 @@ public class TokenManager
                 customer.getTokens().size() + tokensRequested <= MAX_ALLOWED_TOKENS;
     }
 
+    public ArrayList<UUID> getGeneratedTokens()
+    {
+        return generatedTokens;
+    }
+
     private UUID generateNewToken()
     {
         return UUID.randomUUID();
@@ -88,15 +93,15 @@ public class TokenManager
         return checkTokenHasNotBeenUsed(token) && checkTokenIsValid(token);
     }
 
-    private static TokenManager instance = null;
-    private ArrayList<UUID> unusedTokens;
-    private ArrayList<UUID> usedTokens;
-    private ArrayList<UUID> generatedTokens;
-
     public void useToken(UUID token)
     {
         usedTokens.add(token);
     }
+
+    private static TokenManager instance = null;
+    private ArrayList<UUID> unusedTokens;
+    private ArrayList<UUID> usedTokens;
+    private ArrayList<UUID> generatedTokens;
 
     public ArrayList<UUID> getUsedTokens()
     {
