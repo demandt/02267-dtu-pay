@@ -9,7 +9,6 @@ import static org.junit.Assert.*;
 public class StepDefinitions
 {
     private Customer customer;
-    private Merchant merchant;
 
     @Given("the customer has zero tokens")
     public void the_customer_has_zero_tokens()
@@ -110,14 +109,13 @@ public class StepDefinitions
     public void the_customer_has_one_unused_token()
     {
         customer = new Customer("TestCustomer");
-        TokenManager.getInstance().issueToken(customer, 6);
-        customer.getTokens().subList(1, 6).clear();
+        TokenManager.getInstance().issueToken(customer, 1);
     }
 
     @When("the merchant scans a token to receive payment")
     public void the_merchant_scans_a_token_to_receive_payment()
     {
-        merchant = new Merchant();
+        Merchant merchant = new Merchant();
         UUID token = customer.getTokens().get(0);
         merchant.scanToken(token);
     }
@@ -149,8 +147,7 @@ public class StepDefinitions
     @Then("the payment will fail")
     public void the_payment_will_fail()
     {
-        boolean denyPayment = true;
-        assertTrue(denyPayment);
+        assertTrue(true);
     }
 
 }
