@@ -19,7 +19,7 @@ public class StepDefinitions
     @When("the customer requests a new set of tokens")
     public void the_customer_requests_a_new_set_of_tokens()
     {
-        TokenManager.getInstance().requestToken(customer);
+        TokenManager.getInstance().requestToken(customer, 0);
     }
 
     @Then("the customer is issued 6 new tokens")
@@ -56,7 +56,7 @@ public class StepDefinitions
     public void the_request_is_denied()
     {
         int tokens = customer.getTokens().size();
-        assertTrue(TokenManager.getInstance().denyNewTokenRequest(customer, tokens));
+        assertFalse(TokenManager.getInstance().requestToken(customer, tokens));
     }
 
     // useToken.feature step definitions

@@ -12,11 +12,11 @@ public class TokenManager
         generatedTokens = new ArrayList<>();
     }
 
-    public void issueToken(Customer customer, int requestedTokens)
+    public void issueToken(Customer customer, int tokensRequested)
     {
-        if (!denyNewTokenRequest(customer, requestedTokens))
+        if (requestToken(customer, tokensRequested))
         {
-            assignTokenToCustomer(customer, requestedTokens);
+            assignTokenToCustomer(customer, tokensRequested);
         }
     }
 
@@ -31,39 +31,16 @@ public class TokenManager
         }
     }
 
-    public void requestToken(Customer customer)
+    public boolean requestToken(Customer customer, int tokensRequested)
     {
-        if (!denyNewTokenRequest(customer, 0))
-        {
-            approveNewTokenRequest(customer);
-        }
+        return checkTokenRequest(customer, tokensRequested);
     }
 
-    public boolean denyNewTokenRequest(Customer customer, int tokensRequested)
-    {
-        return tokenRequestOutOfBounds(customer, tokensRequested);
-    }
-
-    private boolean tokenRequestOutOfBounds(Customer customer, int tokensRequested)
+    private boolean checkTokenRequest(Customer customer, int tokensRequested)
     {
         int MAX_ALLOWED_TOKENS = 6;
-        return tokensRequested > MAX_ALLOWED_TOKENS ||
-                customer.getTokens().size() + tokensRequested > MAX_ALLOWED_TOKENS;
-    }
-
-    private boolean approveNewTokenRequest(Customer customer)
-    {
-        return hasNoTokens(customer) || hasLessThanTwoTokens(customer);
-    }
-
-    private boolean hasNoTokens(Customer customer)
-    {
-        return customer.getTokens().isEmpty();
-    }
-
-    private boolean hasLessThanTwoTokens(Customer customer)
-    {
-        return customer.getTokens().size() < 2;
+        return tokensRequested <= MAX_ALLOWED_TOKENS &&
+                customer.getTokens().size() + tokensRequested <= MAX_ALLOWED_TOKENS;
     }
 
     private UUID generateNewToken()
@@ -100,16 +77,6 @@ public class TokenManager
     private ArrayList<UUID> unusedTokens;
     private ArrayList<UUID> usedTokens;
     private ArrayList<UUID> generatedTokens;
-
-    public ArrayList<UUID> getUnusedTokens()
-    {
-        return unusedTokens;
-    }
-
-    public ArrayList<UUID> getUsedTokens()
-    {
-        return usedTokens;
-    }
 
     public void useToken(UUID token)
     {
