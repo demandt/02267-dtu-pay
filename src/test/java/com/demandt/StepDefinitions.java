@@ -58,7 +58,7 @@ public class StepDefinitions
         int tokens = customer.getTokens().size();
         assertFalse(TokenManager.getInstance().requestToken(customer, tokens));
     }
-
+    
     // useToken.feature step definitions
 
     @Given("A request to use a token is made")
