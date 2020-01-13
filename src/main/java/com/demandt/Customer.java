@@ -5,10 +5,16 @@ import java.util.UUID;
 
 public class Customer
 {
-    public Customer(String firstName, String lastName)
+    public String getCprNumber()
+    {
+        return cprNumber;
+    }
+
+    public Customer(String firstName, String lastName, String cprNumber)
     {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.cprNumber = cprNumber;
         uniqueId = generateGUID();
         tokens = new ArrayList<>();
     }
@@ -20,6 +26,7 @@ public class Customer
 
     private String firstName;
     private String lastName;
+    private String cprNumber;
     private UUID uniqueId;
     private ArrayList<UUID> tokens;
 

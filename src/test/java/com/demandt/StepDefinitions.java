@@ -12,6 +12,7 @@ import static org.junit.Assert.*;
 public class StepDefinitions
 {
     private DTUPay dtuPay = new DTUPay();
+    private TestHelper testHelper = new TestHelper(dtuPay);
 
     @Given("the customer has zero tokens")
     public void the_customer_has_zero_tokens()
@@ -158,7 +159,7 @@ public class StepDefinitions
     {
         try
         {
-            String cprNumber = dtuPay.getBankCustomer().getCprNumber();
+            String cprNumber = testHelper.getBankCustomer().getCprNumber();
             Account account = BankFactory.getInstance().getAccount(cprNumber);
             BigDecimal expectedBalance = new BigDecimal(1000 - 100);
             BigDecimal actualBalance = account.getBalance();

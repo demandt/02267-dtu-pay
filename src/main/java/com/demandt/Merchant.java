@@ -8,10 +8,18 @@ import java.util.UUID;
 
 public class Merchant
 {
-    public Merchant(String name, DTUPay dtuPay)
+    public Merchant(String name, String cprNumber, DTUPay dtuPay)
     {
         this.name = name;
         this.dtuPay = dtuPay;
+        this.cprNumber = cprNumber;
+    }
+
+    private String cprNumber;
+
+    public String getCprNumber()
+    {
+        return cprNumber;
     }
 
     public boolean scanToken(UUID token)
@@ -25,10 +33,8 @@ public class Merchant
         {
             try
             {
-                String customerCpr = dtuPay.getBankCustomer().getCprNumber();
-                Account customerAccount = BankFactory.getInstance().getAccountByCprNumber(customerCpr);
-                String merchantCpr = dtuPay.getBankMerchant().getCprNumber();
-                Account merchantAccount = BankFactory.getInstance().getAccountByCprNumber(merchantCpr);
+                Account customerAccount = BankFactory.getInstance().getAccountByCprNumber(customer.getCprNumber());
+                Account merchantAccount = BankFactory.getInstance().getAccountByCprNumber(this.cprNumber);
                 BankFactory.getInstance().transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), amount, description);
                 return true;
             }
