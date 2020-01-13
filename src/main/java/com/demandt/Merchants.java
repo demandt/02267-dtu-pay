@@ -1,18 +1,6 @@
 package com.demandt;
 
-public enum Merchants
+public class Merchants
 {
-    COOLSHOP("The Cool Shop");
-
-    private final String name;
-
-    Merchants(String delimiter)
-    {
-        this.name = delimiter;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
+    public static String COOLSHOP = "The Cool Shop";
 }
