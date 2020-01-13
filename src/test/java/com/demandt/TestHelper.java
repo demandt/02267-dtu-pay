@@ -20,7 +20,7 @@ public class TestHelper
     {
         Address address = null;
         Customer customer = new Customer("Customer", "Customersen", "456789-1234", address);
-        Merchant merchant = new Merchant("Coolshop", address, "coolshop@verycoolstuff.com", "456789-2345", dtuPay);
+        Merchant merchant = new Merchant("Coolshop", address, "coolshop@verycoolstuff.com", "456789-2345");
 
         dtuPay.getCustomers().add(customer);
         dtuPay.getMerchants().add(merchant);

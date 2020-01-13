@@ -18,7 +18,7 @@ public class StepDefinitions
     @Given("the customer has zero tokens")
     public void the_customer_has_zero_tokens()
     {
-
+        
     }
 
     @When("the customer requests a new set of tokens")
