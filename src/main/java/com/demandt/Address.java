@@ -2,6 +2,11 @@ package com.demandt;
 
 public class Address
 {
+    private String street;
+    private int streetNumber;
+    private int postalCode;
+    private String country;
+
     public Address(String street, int streetNumber, int postalCode, String country)
     {
         this.street = street;
@@ -9,11 +14,6 @@ public class Address
         this.postalCode = postalCode;
         this.country = country;
     }
-
-    private String street;
-    private int streetNumber;
-    private int postalCode;
-    private String country;
 
     public String getStreet()
     {
