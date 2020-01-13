@@ -1,5 +1,7 @@
 package com.demandt;
 
+import dtu.ws.fastmoney.Account;
+import dtu.ws.fastmoney.Bank;
 import dtu.ws.fastmoney.BankServiceException;
 import dtu.ws.fastmoney.User;
 
@@ -8,15 +10,16 @@ import java.math.BigDecimal;
 public class TestHelper
 {
     private DTUPay dtuPay;
-
+    private Bank bank;
     public DTUPay getDtuPay()
     {
         return dtuPay;
     }
 
-    public TestHelper(DTUPay dtuPay)
+    public TestHelper(DTUPay dtuPay, BankFactory bankFactory)
     {
         this.dtuPay = dtuPay;
+        this.bank = bankFactory.getInstance();
         createUsers();
     }
 
@@ -35,8 +38,8 @@ public class TestHelper
 
         try
         {
-            BankFactory.getInstance().createAccountWithBalance(bankCustomer, initialBalance);
-            BankFactory.getInstance().createAccountWithBalance(bankMerchant, initialBalance);
+            bank.createAccountWithBalance(bankCustomer, initialBalance);
+            bank.createAccountWithBalance(bankMerchant, initialBalance);
         }
         catch (BankServiceException e)
         {
@@ -65,5 +68,9 @@ public class TestHelper
     public User getBankMerchant()
     {
         return bankMerchant;
+    }
+
+    public Account getAccount(String cprNumber) throws BankServiceException {
+        return bank.getAccount(cprNumber);
     }
 }
