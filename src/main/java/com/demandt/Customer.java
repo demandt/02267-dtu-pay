@@ -10,6 +10,7 @@ public class Customer extends Person
         super(firstName, lastName, cprNumber, address);
         tokens = new ArrayList<>();
     }
+
     private ArrayList<UUID> tokens;
 
     public ArrayList<UUID> getTokens()

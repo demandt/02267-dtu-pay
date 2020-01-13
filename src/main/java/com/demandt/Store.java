@@ -12,7 +12,7 @@ public class Store
         this.storeName = storeName;
         this.address = address;
         this.email = email;
-        this.uuid = uuid;
+        this.uuid = uuid; // right now just the CPR-number
     }
 
     public String getUuid()

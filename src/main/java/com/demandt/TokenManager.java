@@ -63,6 +63,25 @@ public class TokenManager
         generatedTokens.add(tokens);
     }
 
+    public boolean checkTokenHasNotBeenUsed(UUID token) { return unusedTokens.contains(token); }
+
+    public boolean checkTokenIsValid(UUID token)
+    {
+        return generatedTokens.contains(token);
+    }
+
+    public boolean approveUseOfToken(UUID token) { return checkTokenHasNotBeenUsed(token) && checkTokenIsValid(token); }
+
+    public boolean useToken(UUID token)
+    {
+        if (!usedTokens.contains(token))
+        {
+            usedTokens.add(token);
+            return true;
+        }
+        return false;
+    }
+
     public static TokenManager getInstance()
     {
         if (instance == null)
@@ -76,31 +95,6 @@ public class TokenManager
             }
         }
         return instance;
-    }
-
-    public boolean checkTokenHasNotBeenUsed(UUID token)
-    {
-        return unusedTokens.contains(token);
-    }
-
-    public boolean checkTokenIsValid(UUID token)
-    {
-        return generatedTokens.contains(token);
-    }
-
-    public boolean approveUseOfToken(UUID token)
-    {
-        return checkTokenHasNotBeenUsed(token) && checkTokenIsValid(token);
-    }
-
-    public boolean useToken(UUID token)
-    {
-        if (!usedTokens.contains(token))
-        {
-            usedTokens.add(token);
-            return true;
-        }
-        return false;
     }
 
     private static TokenManager instance = null;
