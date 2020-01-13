@@ -3,7 +3,6 @@ package com.demandt;
 import cucumber.api.java.en.*;
 import dtu.ws.fastmoney.Account;
 import dtu.ws.fastmoney.BankServiceException;
-//import io.cucumber.java.en.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -84,8 +83,8 @@ public class StepDefinitions
     {
         Customer customer = dtuPay.getCustomers().get(0);
         UUID token = customer.getTokens().get(0);
-        boolean hasTokenBeenUsed = TokenManager.getInstance().checkTokenHasNotBeenUsed(token);
-        assertFalse(hasTokenBeenUsed);
+        boolean tokenHasNotBeenUsed = TokenManager.getInstance().checkTokenHasNotBeenUsed(token);
+        assertTrue(tokenHasNotBeenUsed);
     }
 
     @When("the token is known to the system")
@@ -182,6 +181,8 @@ public class StepDefinitions
         boolean isTokenUsed = TokenManager.getInstance().getUsedTokens().contains(usedToken);
         assertTrue(isTokenUsed);
 
+        TokenManager.getInstance().getGeneratedTokens().remove(usedToken);
+
         UUID fakeToken = UUID.randomUUID();
         boolean isTokenFake = TokenManager.getInstance().getGeneratedTokens().contains(fakeToken);
         assertFalse(isTokenFake);
@@ -190,17 +191,11 @@ public class StepDefinitions
     @Then("the payment will fail")
     public void the_payment_will_fail()
     {
-        //assertTrue(true);
         Customer customer = dtuPay.getCustomers().get(0);
         Merchant merchant = dtuPay.getMerchants().get(0);
-
         UUID token = customer.getTokens().get(0);
-
         BigDecimal amount = new BigDecimal(100);
-
         boolean isPaymentGranted = merchant.payAtMerchant(customer, token, amount, "test");
-
-        assertTrue(isPaymentGranted);
+        assertFalse(isPaymentGranted);
     }
-
 }

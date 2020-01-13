@@ -39,7 +39,6 @@ public class DTUPay
         {
             e.getErrorMessage();
         }
-
     }
 
     private User createUser(String firstName, String lastName, String cprNumber)
