@@ -5,9 +5,10 @@ import java.util.UUID;
 
 public class Customer
 {
-    public Customer(String name)
+    public Customer(String firstName, String lastName)
     {
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         uniqueId = generateGUID();
         tokens = new ArrayList<>();
     }
@@ -17,13 +18,19 @@ public class Customer
         return UUID.randomUUID();
     }
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private UUID uniqueId;
     private ArrayList<UUID> tokens;
 
-    public String getName()
+    public String getFirstName()
     {
-        return name;
+        return firstName;
+    }
+
+    public String getLastName()
+    {
+        return lastName;
     }
 
     public UUID getUniqueId()

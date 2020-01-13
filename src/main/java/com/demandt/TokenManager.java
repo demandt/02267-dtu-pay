@@ -93,9 +93,14 @@ public class TokenManager
         return checkTokenHasNotBeenUsed(token) && checkTokenIsValid(token);
     }
 
-    public void useToken(UUID token)
+    public boolean useToken(UUID token)
     {
-        usedTokens.add(token);
+        if (!usedTokens.contains(token))
+        {
+            usedTokens.add(token);
+            return true;
+        }
+        return false;
     }
 
     private static TokenManager instance = null;
