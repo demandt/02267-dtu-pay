@@ -4,10 +4,9 @@ import dtu.ws.fastmoney.Bank;
 
 public class BankFactory
 {
-    private Bank instance = null;
+    private Bank bank;
 
-    public Bank getInstance()
-    {
-        return new Bank();
-    }
+    public BankFactory() { bank = new Bank(); }
+
+    public Bank getBank() { return bank; }
 }

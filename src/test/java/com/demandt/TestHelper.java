@@ -9,17 +9,10 @@ import java.math.BigDecimal;
 
 public class TestHelper
 {
-    private DTUPay dtuPay;
-    private Bank bank;
-    public DTUPay getDtuPay()
-    {
-        return dtuPay;
-    }
-
     public TestHelper(DTUPay dtuPay, BankFactory bankFactory)
     {
         this.dtuPay = dtuPay;
-        this.bank = bankFactory.getInstance();
+        this.bank = bankFactory.getBank();
         createUsers();
     }
 
@@ -56,21 +49,28 @@ public class TestHelper
         return user;
     }
 
+    private DTUPay dtuPay;
+    private Bank bank;
     private User bankCustomer;
+    private User bankMerchant;
+
+    public DTUPay getDtuPay()
+    {
+        return dtuPay;
+    }
 
     public User getBankCustomer()
     {
         return bankCustomer;
     }
 
-    private User bankMerchant;
-
     public User getBankMerchant()
     {
         return bankMerchant;
     }
 
-    public Account getAccount(String cprNumber) throws BankServiceException {
+    public Account getAccount(String cprNumber) throws BankServiceException
+    {
         return bank.getAccount(cprNumber);
     }
 }

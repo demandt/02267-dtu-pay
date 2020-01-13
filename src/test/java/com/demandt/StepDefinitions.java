@@ -11,8 +11,8 @@ import static org.junit.Assert.*;
 
 public class StepDefinitions
 {
-    private DTUPay dtuPay = new DTUPay();
     private BankFactory bankFactory = new BankFactory();
+    private DTUPay dtuPay = new DTUPay(bankFactory);
     private TestHelper testHelper = new TestHelper(dtuPay, bankFactory);
 
     @Given("the customer has zero tokens")
@@ -151,7 +151,7 @@ public class StepDefinitions
         Merchant merchant = dtuPay.getMerchants().get(0);
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(100);
-        boolean isPaymentGranted = merchant.payAtMerchant(customer, token, amount, "test");
+        boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, amount, "test");
         assertTrue(isPaymentGranted);
     }
 
@@ -197,7 +197,7 @@ public class StepDefinitions
         Merchant merchant = dtuPay.getMerchants().get(0);
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(100);
-        boolean isPaymentGranted = merchant.payAtMerchant(customer, token, amount, "test");
+        boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, amount, "test");
         assertFalse(isPaymentGranted);
     }
 }

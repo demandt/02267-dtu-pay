@@ -5,11 +5,6 @@ import java.util.UUID;
 
 public class Customer
 {
-    public String getCprNumber()
-    {
-        return cprNumber;
-    }
-
     public Customer(String firstName, String lastName, String cprNumber)
     {
         this.firstName = firstName;
@@ -30,20 +25,13 @@ public class Customer
     private UUID uniqueId;
     private ArrayList<UUID> tokens;
 
-    public String getFirstName()
-    {
-        return firstName;
-    }
+    public String getFirstName() { return firstName; }
 
-    public String getLastName()
-    {
-        return lastName;
-    }
+    public String getLastName() { return lastName; }
 
-    public UUID getUniqueId()
-    {
-        return uniqueId;
-    }
+    public String getCprNumber() { return cprNumber; }
+
+    public UUID getUniqueId() { return uniqueId; }
 
     public ArrayList<UUID> getTokens()
     {
