@@ -54,23 +54,11 @@ public class TestHelper
     private User bankCustomer;
     private User bankMerchant;
 
-    public DTUPay getDtuPay()
-    {
-        return dtuPay;
-    }
+    public DTUPay getDtuPay() { return dtuPay; }
 
-    public User getBankCustomer()
-    {
-        return bankCustomer;
-    }
+    public User getBankCustomer() { return bankCustomer; }
 
-    public User getBankMerchant()
-    {
-        return bankMerchant;
-    }
+    public User getBankMerchant() { return bankMerchant; }
 
-    public Account getAccount(String cprNumber) throws BankServiceException
-    {
-        return bank.getAccount(cprNumber);
-    }
+    public Account getAccount(String cprNumber) throws BankServiceException { return bank.getAccount(cprNumber); }
 }
