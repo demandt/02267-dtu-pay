@@ -11,8 +11,6 @@ import java.util.UUID;
 
 public class DTUPay
 {
-    private Bank bank;
-
     public DTUPay(BankFactory bankFactory)
     {
         this.bank = bankFactory.getBank();
@@ -28,7 +26,7 @@ public class DTUPay
             try
             {
                 Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
-                Account merchantAccount = bank.getAccountByCprNumber(merchant.getCprNumber());
+                Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
                 bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), amount, description);
                 return true;
             }
@@ -41,6 +39,7 @@ public class DTUPay
         return false;
     }
 
+    private Bank bank;
     private List<Customer> customers;
     private List<Merchant> merchants;
     private List<UUID> authorizedTransactions;

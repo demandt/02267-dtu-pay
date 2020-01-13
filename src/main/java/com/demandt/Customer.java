@@ -3,13 +3,11 @@ package com.demandt;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Customer
+public class Customer extends Person
 {
-    public Customer(String firstName, String lastName, String cprNumber)
+    public Customer(String firstName, String lastName, String cprNumber, Address address)
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.cprNumber = cprNumber;
+        super(firstName, lastName, cprNumber, address);
         uniqueId = generateGUID();
         tokens = new ArrayList<>();
     }
@@ -19,17 +17,8 @@ public class Customer
         return UUID.randomUUID();
     }
 
-    private String firstName;
-    private String lastName;
-    private String cprNumber;
     private UUID uniqueId;
     private ArrayList<UUID> tokens;
-
-    public String getFirstName() { return firstName; }
-
-    public String getLastName() { return lastName; }
-
-    public String getCprNumber() { return cprNumber; }
 
     public UUID getUniqueId() { return uniqueId; }
 

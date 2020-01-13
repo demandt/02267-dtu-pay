@@ -18,8 +18,9 @@ public class TestHelper
 
     private void createUsers()
     {
-        Customer customer = new Customer("Customer", "Customersen", "456789-1234");
-        Merchant merchant = new Merchant("Coolshop", "456789-2345", dtuPay);
+        Address address = null;
+        Customer customer = new Customer("Customer", "Customersen", "456789-1234", address);
+        Merchant merchant = new Merchant("Coolshop", address, "coolshop@verycoolstuff.com", "456789-2345", dtuPay);
 
         dtuPay.getCustomers().add(customer);
         dtuPay.getMerchants().add(merchant);

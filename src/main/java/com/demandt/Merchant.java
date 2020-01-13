@@ -2,13 +2,14 @@ package com.demandt;
 
 import java.util.UUID;
 
-public class Merchant
+public class Merchant extends Store
 {
-    public Merchant(String name, String cprNumber, DTUPay dtuPay)
+    private DTUPay dtuPay;
+
+    public Merchant(String storeName, Address address, String email, String uuid, DTUPay dtuPay)
     {
-        this.name = name;
+        super(storeName, address, email, uuid);
         this.dtuPay = dtuPay;
-        this.cprNumber = cprNumber;
     }
 
     public boolean scanToken(UUID token)
@@ -16,16 +17,5 @@ public class Merchant
         return TokenManager.getInstance().approveUseOfToken(token);
     }
 
-    private String name;
-    private String cprNumber;
-    private DTUPay dtuPay;
-
-    public String getCprNumber() { return cprNumber; }
-
     public DTUPay getDtuPay() { return dtuPay; }
-
-    public String getName()
-    {
-        return name;
-    }
 }
