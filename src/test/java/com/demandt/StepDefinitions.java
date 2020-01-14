@@ -201,14 +201,14 @@ public class StepDefinitions
         assertFalse(isPaymentGranted);
     }
 
-//    @After
-//    public void removeAddedAcounts() throws BankServiceException_Exception
-//    {
-//        Customer customer = dtuPay.getCustomers().get(0);
-//        Merchant merchant = dtuPay.getMerchants().get(0);
-//        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
-//        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
-//        bankFactory.getBank().retireAccount(customerAccount);
-//        bankFactory.getBank().retireAccount(merchantAccount);
-//    }
+    @After
+    public void removeAddedAcounts() throws BankServiceException_Exception
+    {
+        Customer customer = dtuPay.getCustomers().get(0);
+        Merchant merchant = dtuPay.getMerchants().get(0);
+        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
+        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
+        bankFactory.getBank().retireAccount(customerAccount);
+        bankFactory.getBank().retireAccount(merchantAccount);
+    }
 }
