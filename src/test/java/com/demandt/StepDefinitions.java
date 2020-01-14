@@ -181,7 +181,7 @@ public class StepDefinitions
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(100);
         transactionID = dtuPay.performPayment(customer, merchant, token, amount, "test");
-        assertNotNull(transactionID);
+        assertNull(transactionID);
     }
 
 //    @After
