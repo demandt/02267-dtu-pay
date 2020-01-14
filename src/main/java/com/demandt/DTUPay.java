@@ -24,15 +24,25 @@ public class DTUPay
         authorizedTransactions = new ArrayList<>();
     }
 
-    public boolean performPayment(Customer customer, Merchant merchant, UUID token, BigDecimal amount, String description)
+    public boolean verifyTransaction(BigDecimal wantedAmount, BigDecimal givenAmount)
     {
-        if (merchant.scanToken(token))
+        return isLessThanOrEqualTo(wantedAmount, givenAmount);
+    }
+
+    private boolean isLessThanOrEqualTo(BigDecimal wantedAmount, BigDecimal givenAmount)
+    {
+        return wantedAmount.compareTo(givenAmount) == -1 || wantedAmount.compareTo(givenAmount) == 0;
+    }
+
+    public boolean performPayment(Customer customer, Merchant merchant, UUID token, BigDecimal wantedAmount, BigDecimal givenAmount, String description)
+    {
+        if (merchant.scanToken(token) && verifyTransaction(wantedAmount, givenAmount))
         {
             try
             {
                 Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
                 Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
-                bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), amount, description);
+                bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), givenAmount, description);
                 return true;
             }
             catch (BankServiceException_Exception e)
