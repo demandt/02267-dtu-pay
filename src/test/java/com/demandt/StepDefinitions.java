@@ -1,5 +1,6 @@
 package com.demandt;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.en.*;
 import com.demandt.services.bank.*;
@@ -16,11 +17,10 @@ public class StepDefinitions
     private TestHelper testHelper = new TestHelper(dtuPay, bankFactory);
     private Customer customer = dtuPay.getCustomers().get(0);
     private Merchant merchant = dtuPay.getMerchants().get(0);
+    private UUID transactionID;
 
     @Given("the customer has zero tokens")
-    public void the_customer_has_zero_tokens()
-    {
-
+    public void the_customer_has_zero_tokens() {
     }
 
     @When("the customer requests a new set of tokens")
@@ -136,8 +136,14 @@ public class StepDefinitions
     {
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(100);
-        boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, amount, "test");
-        assertTrue(isPaymentGranted);
+        transactionID = dtuPay.performPayment(customer, merchant, token, amount, "test");
+        assertNull(transactionID);
+    }
+
+    @And("^the customer get a receipt for an amount of money equal to the payment$")
+    public void theCustomerGetAReceiptForAnAmountOfMoneyEqualToThePayment() {
+        assertEquals(customer.);
+
     }
 
     @Then("the correct amount is transferred from customer to merchant")
@@ -179,12 +185,41 @@ public class StepDefinitions
         assertFalse(isPaymentGranted);
     }
 
-    @After
-    public void doSomethingAfter() throws BankServiceException_Exception
-    {
-        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
-        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
-        bankFactory.getBank().retireAccount(customerAccount);
-        bankFactory.getBank().retireAccount(merchantAccount);
+//    @After
+//    public void doSomethingAfter() throws BankServiceException_Exception
+//    {
+//        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
+//        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
+//        bankFactory.getBank().retireAccount(customerAccount);
+//        bankFactory.getBank().retireAccount(merchantAccount);
+//    }
+
+
+    // ------------------ refund steps ---------------------
+
+    @Given("^a customer with account \"([^\"]*)\" applies for a refund of amount (\\d+)$")
+    public void aCustomerWithAccountAppliesForARefundOfAmount(String arg0, int arg1) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
     }
+
+    @When("^the customer has a valid receipt of amount (\\d+)$")
+    public void theCustomerHasAValidReceiptOfAmount(int arg0) {
+
+    }
+
+    @Then("^the merchant will transfer (\\d+) from the merchants account \"([^\"]*)\" to the customers account \"([^\"]*)\"$")
+    public void theMerchantWillTransferFromTheMerchantsAccountToTheCustomersAccount(int arg0, String arg1, String arg2) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^the customer does not have a valid receipt of amount (\\d+)$")
+    public void theCustomerDoesNotHaveAValidReceiptOfAmount(int arg0) {
+    }
+
+    @Then("^the merchant will deny the refund$")
+    public void theMerchantWillDenyTheRefund() {
+    }
+
 }

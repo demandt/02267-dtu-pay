@@ -15,6 +15,7 @@ public class DTUPay
     private List<Customer> customers;
     private List<Merchant> merchants;
     private List<UUID> authorizedTransactions;
+    private Utils utils;
 
     public DTUPay(BankFactory bankFactory)
     {
@@ -22,9 +23,10 @@ public class DTUPay
         customers = new ArrayList<>();
         merchants = new ArrayList<>();
         authorizedTransactions = new ArrayList<>();
+        this.utils = new Utils();
     }
 
-    public boolean performPayment(Customer customer, Merchant merchant, UUID token, BigDecimal amount, String description)
+    public UUID performPayment(Customer customer, Merchant merchant, UUID token, BigDecimal amount, String description)
     {
         if (merchant.scanToken(token))
         {
@@ -33,15 +35,18 @@ public class DTUPay
                 Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
                 Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
                 bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), amount, description);
-                return true;
+                UUID transaction = utils.generateNewToken();
+                customer.getReceipts().put(transaction, amount);
+                merchant.getTransactions().add(transaction);
+                return transaction;
             }
             catch (BankServiceException_Exception e)
             {
                 e.getMessage();
-                return false;
+                return null;
             }
         }
-        return false;
+        return null;
     }
 
     public List<Customer> getCustomers() { return customers; }

@@ -9,6 +9,7 @@ public class TokenManager
     private ArrayList<UUID> unusedTokens;
     private ArrayList<UUID> usedTokens;
     private ArrayList<UUID> generatedTokens;
+    private Utils utils;
 
     public static TokenManager getInstance()
     {
@@ -30,6 +31,7 @@ public class TokenManager
         unusedTokens = new ArrayList<>();
         usedTokens = new ArrayList<>();
         generatedTokens = new ArrayList<>();
+        utils = new Utils();
     }
 
     public void issueToken(Customer customer, int tokensRequested)
@@ -44,7 +46,7 @@ public class TokenManager
     {
         for (int i = 0; i < tokens; i++)
         {
-            UUID token = generateNewToken();
+            UUID token = utils.generateNewToken();
             addToUnusedTokens(token, this.unusedTokens);
             addToGeneratedTokens(token, this.generatedTokens);
             customer.getTokens().add(token);
@@ -63,10 +65,6 @@ public class TokenManager
                 customer.getTokens().size() + tokensRequested <= MAX_ALLOWED_TOKENS;
     }
 
-    private UUID generateNewToken()
-    {
-        return UUID.randomUUID();
-    }
 
     private void addToUnusedTokens(UUID token, ArrayList<UUID> unusedTokens)
     {
