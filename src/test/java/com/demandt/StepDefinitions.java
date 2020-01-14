@@ -14,8 +14,6 @@ public class StepDefinitions
     private BankFactory bankFactory = new BankFactory();
     private DTUPay dtuPay = new DTUPay(bankFactory);
     private TestHelper testHelper = new TestHelper(dtuPay, bankFactory);
-//    private Customer customer = dtuPay.getCustomers().get(0);
-//    private Merchant merchant = dtuPay.getMerchants().get(0);
 
     @Given("the customer has zero tokens")
     public void the_customer_has_zero_tokens()
