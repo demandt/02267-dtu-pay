@@ -19,6 +19,10 @@ public class Customer extends Person
         this.tokens = tokens;
     }
 
+    public boolean applyForRefund(DTUPay dtuPay, Merchant merchant, UUID transactionID) {
+        return dtuPay.performRefund(this, merchant, transactionID, this.getReceipts().get(transactionID));
+    }
+
     private ArrayList<UUID> tokens;
 
     public ArrayList<UUID> getTokens()

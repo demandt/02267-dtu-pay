@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.demandt.services.bank.*;
+import jdk.nashorn.internal.parser.Token;
 
 public class TestHelper
 {
@@ -18,7 +19,7 @@ public class TestHelper
     {
         Address address = null;
         Customer customer = new Customer("Customer", "Test", "1234", address);
-        Merchant merchant = new Merchant("TestShop", address, "coolshop@verycoolstuff.com", "1234");
+        Merchant merchant = new Merchant("TestShop", address, "coolshop@verycoolstuff.com", "1235");
 
         dtuPay.getCustomers().add(customer);
         dtuPay.getMerchants().add(merchant);
@@ -30,8 +31,8 @@ public class TestHelper
 
         try
         {
-            bank.createAccountWithBalance(bankCustomer, initialBalance);
-            bank.createAccountWithBalance(bankMerchant, initialBalance);
+            bank.createAccountWithBalance(bankCustomer, initialBalance.add(BigDecimal.valueOf(10)));
+            bank.createAccountWithBalance(bankMerchant, initialBalance.subtract(BigDecimal.valueOf(10)));
         }
         catch (BankServiceException_Exception e)
         {
@@ -46,6 +47,11 @@ public class TestHelper
         user.setLastName(lastName);
         user.setCprNumber(cprNumber);
         return user;
+    }
+
+    public UUID createPayment(Customer customer, Merchant merchant) {
+        TokenManager.getInstance().issueToken(customer, 1);
+        return dtuPay.performPayment(customer, merchant, customer.getTokens().get(0), BigDecimal.valueOf(10), "setup");
     }
 
     private String generateUuid()

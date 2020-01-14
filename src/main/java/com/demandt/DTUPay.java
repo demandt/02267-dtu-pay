@@ -38,6 +38,7 @@ public class DTUPay
                 UUID transaction = utils.generateNewToken();
                 customer.getReceipts().put(transaction, amount);
                 merchant.getTransactions().add(transaction);
+                authorizedTransactions.add(transaction);
                 return transaction;
             }
             catch (BankServiceException_Exception e)
@@ -47,6 +48,32 @@ public class DTUPay
             }
         }
         return null;
+    }
+
+    public boolean performRefund(Customer customer, Merchant merchant, UUID transactionID, BigDecimal amount) {
+        if(checkTransaction(transactionID)) {
+            try
+            {
+                Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
+                Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
+                bank.transferMoneyFromTo(merchantAccount.getId(), customerAccount.getId(), amount, "refund");
+                UUID transaction = utils.generateNewToken();
+                customer.getReceipts().remove(transaction);
+                merchant.getTransactions().remove(transaction);
+                authorizedTransactions.remove(transaction);
+                return true;
+            }
+            catch (BankServiceException_Exception e)
+            {
+                e.getMessage();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkTransaction(UUID transactionID) {
+        return authorizedTransactions.contains(transactionID);
     }
 
     public List<Customer> getCustomers() { return customers; }
