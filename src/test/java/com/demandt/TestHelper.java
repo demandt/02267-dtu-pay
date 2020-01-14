@@ -16,12 +16,12 @@ public class TestHelper
     private void createUsers()
     {
         Address address = null;
-        Customer customer = new Customer("Kristoffer", "Hansen", "456789-1234", address);
+        Customer customer = new Customer("Kristoffer", "Hansen", "test@maik.dk", "456789-1234", address);
         Person shopOwner = new Person("Michael", "Hansen", "456789-2345", address);
         Merchant merchant = new Merchant("TestShop", address, "coolshop@verycoolstuff.com", "456789-3456", shopOwner);
 
-        dtuPay.getCustomers().put(customer.getCprNumber(), customer);
-        dtuPay.getMerchants().put(merchant.getUuid(), merchant);
+        dtuPay.registerCustomer(customer);
+        dtuPay.registerMerchant(merchant);
 
         User bankCustomer = createUser(customer.getFirstName(), customer.getLastName(), customer.getCprNumber());
         User bankMerchant = createUser(shopOwner.getFirstName(), shopOwner.getLastName(), merchant.getUuid());

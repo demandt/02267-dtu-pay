@@ -1,5 +1,7 @@
 package com.demandt.utils;
 
+import com.demandt.Customer;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -10,10 +12,20 @@ public class HelperMethods
         return wantedAmount.compareTo(givenAmount) < 0 || wantedAmount.compareTo(givenAmount) == 0;
     }
 
-    public static String generateUuid()
+    public static UUID generateUuid()
     {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID();
     }
 
     public static UUID uuidFromString(String uuid) { return UUID.fromString(uuid); }
+
+    public static void printCustomerInformation(Customer customer)
+    {
+        System.out.println("Customer information");
+        System.out.println("====================");
+        System.out.println("First name: " + customer.getFirstName());
+        System.out.println("Last name:  " + customer.getLastName());
+        System.out.println("E-mail:     " + customer.getEmail());
+        System.out.println("CPR:        " + customer.getCprNumber());
+    }
 }
