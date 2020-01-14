@@ -1,7 +1,6 @@
 package com.demandt;
 
-import com.demandt.services.bank.BankService;
-import com.demandt.services.bank.BankServiceService;
+import dtu.ws.fastmoney.*;
 
 public class BankFactory
 {

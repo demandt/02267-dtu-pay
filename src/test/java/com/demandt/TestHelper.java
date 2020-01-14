@@ -2,8 +2,8 @@ package com.demandt;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import dtu.ws.fastmoney.*;
 
-import com.demandt.services.bank.*;
 
 public class TestHelper
 {

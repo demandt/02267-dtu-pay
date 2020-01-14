@@ -1,8 +1,7 @@
 package com.demandt;
 
-import com.demandt.services.bank.Account;
-import com.demandt.services.bank.BankService;
-import com.demandt.services.bank.BankServiceException_Exception;
+
+import dtu.ws.fastmoney.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

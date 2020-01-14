@@ -1,8 +1,12 @@
 package com.demandt;
+import dtu.ws.fastmoney.Account;
+
 
 import cucumber.api.java.After;
 import cucumber.api.java.en.*;
-import com.demandt.services.bank.*;
+import dtu.ws.fastmoney.BankServiceException_Exception;
+import org.junit.Assert;
+
 
 import java.math.BigDecimal;
 import java.util.UUID;
