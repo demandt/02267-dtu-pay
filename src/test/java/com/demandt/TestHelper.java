@@ -24,7 +24,7 @@ public class TestHelper
         dtuPay.getMerchants().add(merchant);
 
         bankCustomer = createUser(customer.getFirstName(), customer.getLastName(), customer.getCprNumber());
-        bankMerchant = createUser("Merchant", "Merchantsen", "456789-2345");
+        bankMerchant = createUser("Merchant", "Merchantsen", generateUuid());
 
         BigDecimal initialBalance = new BigDecimal("1000");
 
