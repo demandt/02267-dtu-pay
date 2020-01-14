@@ -3,35 +3,23 @@ package com.demandt;
 import com.demandt.services.bank.Account;
 import com.demandt.services.bank.BankService;
 import com.demandt.services.bank.BankServiceException_Exception;
+import com.demandt.utils.HelperMethods;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class DTUPay
 {
     private BankService bank;
-    private List<Customer> customers;
-    private List<Merchant> merchants;
-    private List<UUID> authorizedTransactions;
+    private HashMap<String, Customer> customers;
+    private HashMap<String, Merchant> merchants;
 
     public DTUPay(BankFactory bankFactory)
     {
         this.bank = bankFactory.getBank();
-        customers = new ArrayList<>();
-        merchants = new ArrayList<>();
-        authorizedTransactions = new ArrayList<>();
-    }
-
-    public boolean verifyTransaction(BigDecimal wantedAmount, BigDecimal givenAmount)
-    {
-        return isLessThanOrEqualTo(wantedAmount, givenAmount);
-    }
-
-    private boolean isLessThanOrEqualTo(BigDecimal wantedAmount, BigDecimal givenAmount)
-    {
-        return wantedAmount.compareTo(givenAmount) == -1 || wantedAmount.compareTo(givenAmount) == 0;
+        customers = new HashMap<>();
+        merchants = new HashMap<>();
     }
 
     public boolean performPayment(Customer customer, Merchant merchant, UUID token, BigDecimal wantedAmount, BigDecimal givenAmount, String description)
@@ -54,9 +42,12 @@ public class DTUPay
         return false;
     }
 
-    public List<Customer> getCustomers() { return customers; }
+    public boolean verifyTransaction(BigDecimal wantedAmount, BigDecimal givenAmount)
+    {
+        return HelperMethods.isLessThanOrEqualTo(wantedAmount, givenAmount);
+    }
 
-    public List<Merchant> getMerchants() { return merchants; }
+    public HashMap<String, Customer> getCustomers() { return customers; }
 
-    public List<UUID> getAuthorizedTransactions() { return authorizedTransactions; }
+    public HashMap<String, Merchant> getMerchants() { return merchants; }
 }

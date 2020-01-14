@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public class Merchant extends Store
 {
-    public Merchant(String storeName, Address address, String email, String uuid)
+    public Merchant(String name, Address address, String email, String uuid, Person owner)
     {
-        super(storeName, address, email, uuid);
+        super(name, address, email, uuid, owner);
     }
 
     public boolean scanToken(UUID token)
