@@ -1,11 +1,9 @@
 package com.demandt;
 
-import dtu.ws.fastmoney.Account;
-import dtu.ws.fastmoney.Bank;
-import dtu.ws.fastmoney.BankServiceException;
-import dtu.ws.fastmoney.User;
-
 import java.math.BigDecimal;
+import java.util.UUID;
+
+import com.demandt.services.bank.*;
 
 public class TestHelper
 {
@@ -19,8 +17,8 @@ public class TestHelper
     private void createUsers()
     {
         Address address = null;
-        Customer customer = new Customer("Customer", "Customersen", "456789-1234", address);
-        Merchant merchant = new Merchant("Coolshop", address, "coolshop@verycoolstuff.com", "456789-2345");
+        Customer customer = new Customer("Customer", "Test", generateUuid(), address);
+        Merchant merchant = new Merchant("TestShop", address, "coolshop@verycoolstuff.com", generateUuid());
 
         dtuPay.getCustomers().add(customer);
         dtuPay.getMerchants().add(merchant);
@@ -35,9 +33,9 @@ public class TestHelper
             bank.createAccountWithBalance(bankCustomer, initialBalance);
             bank.createAccountWithBalance(bankMerchant, initialBalance);
         }
-        catch (BankServiceException e)
+        catch (BankServiceException_Exception e)
         {
-            e.getErrorMessage();
+            e.getMessage();
         }
     }
 
@@ -50,8 +48,13 @@ public class TestHelper
         return user;
     }
 
+    private String generateUuid()
+    {
+        return UUID.randomUUID().toString();
+    }
+
     private DTUPay dtuPay;
-    private Bank bank;
+    private BankService bank;
     private User bankCustomer;
     private User bankMerchant;
 
@@ -61,5 +64,5 @@ public class TestHelper
 
     public User getBankMerchant() { return bankMerchant; }
 
-    public Account getAccount(String cprNumber) throws BankServiceException { return bank.getAccount(cprNumber); }
+    public Account getAccount(String cprNumber) throws BankServiceException_Exception { return bank.getAccount(cprNumber); }
 }

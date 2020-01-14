@@ -1,12 +1,19 @@
 package com.demandt;
 
-import dtu.ws.fastmoney.Bank;
+import com.demandt.services.bank.BankService;
+import com.demandt.services.bank.BankServiceService;
 
 public class BankFactory
 {
-    private Bank bank;
+    private BankService bankService;
 
-    public BankFactory() { bank = new Bank(); }
+    public BankFactory()
+    {
+        bankService = new BankServiceService().getBankServicePort();
+    }
 
-    public Bank getBank() { return bank; }
+    public BankService getBank()
+    {
+        return bankService;
+    }
 }

@@ -5,6 +5,26 @@ import java.util.UUID;
 
 public class TokenManager
 {
+    private static TokenManager instance = null;
+    private ArrayList<UUID> unusedTokens;
+    private ArrayList<UUID> usedTokens;
+    private ArrayList<UUID> generatedTokens;
+
+    public static TokenManager getInstance()
+    {
+        if (instance == null)
+        {
+            synchronized (TokenManager.class)
+            {
+                if (instance == null)
+                {
+                    instance = new TokenManager();
+                }
+            }
+        }
+        return instance;
+    }
+
     private TokenManager()
     {
         unusedTokens = new ArrayList<>();
@@ -43,11 +63,6 @@ public class TokenManager
                 customer.getTokens().size() + tokensRequested <= MAX_ALLOWED_TOKENS;
     }
 
-    public ArrayList<UUID> getGeneratedTokens()
-    {
-        return generatedTokens;
-    }
-
     private UUID generateNewToken()
     {
         return UUID.randomUUID();
@@ -82,28 +97,15 @@ public class TokenManager
         return false;
     }
 
-    public static TokenManager getInstance()
-    {
-        if (instance == null)
-        {
-            synchronized (TokenManager.class)
-            {
-                if (instance == null)
-                {
-                    instance = new TokenManager();
-                }
-            }
-        }
-        return instance;
-    }
-
-    private static TokenManager instance = null;
-    private ArrayList<UUID> unusedTokens;
-    private ArrayList<UUID> usedTokens;
-    private ArrayList<UUID> generatedTokens;
-
     public ArrayList<UUID> getUsedTokens()
     {
         return usedTokens;
     }
+
+    public ArrayList<UUID> getGeneratedTokens()
+    {
+        return generatedTokens;
+    }
+
+    public ArrayList<UUID> getUnusedTokens() { return unusedTokens; }
 }

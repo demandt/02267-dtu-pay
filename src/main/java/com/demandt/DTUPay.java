@@ -1,8 +1,8 @@
 package com.demandt;
 
-import dtu.ws.fastmoney.Account;
-import dtu.ws.fastmoney.Bank;
-import dtu.ws.fastmoney.BankServiceException;
+import com.demandt.services.bank.Account;
+import com.demandt.services.bank.BankService;
+import com.demandt.services.bank.BankServiceException_Exception;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,6 +11,11 @@ import java.util.UUID;
 
 public class DTUPay
 {
+    private BankService bank;
+    private List<Customer> customers;
+    private List<Merchant> merchants;
+    private List<UUID> authorizedTransactions;
+
     public DTUPay(BankFactory bankFactory)
     {
         this.bank = bankFactory.getBank();
@@ -30,19 +35,14 @@ public class DTUPay
                 bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), amount, description);
                 return true;
             }
-            catch (BankServiceException e)
+            catch (BankServiceException_Exception e)
             {
-                e.getErrorMessage();
+                e.getMessage();
                 return false;
             }
         }
         return false;
     }
-
-    private Bank bank;
-    private List<Customer> customers;
-    private List<Merchant> merchants;
-    private List<UUID> authorizedTransactions;
 
     public List<Customer> getCustomers() { return customers; }
 

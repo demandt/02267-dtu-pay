@@ -1,8 +1,8 @@
 package com.demandt;
 
+import cucumber.api.java.After;
 import cucumber.api.java.en.*;
-import dtu.ws.fastmoney.Account;
-import dtu.ws.fastmoney.BankServiceException;
+import com.demandt.services.bank.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -20,7 +20,7 @@ public class StepDefinitions
     @Given("the customer has zero tokens")
     public void the_customer_has_zero_tokens()
     {
-        
+
     }
 
     @When("the customer requests a new set of tokens")
@@ -151,9 +151,9 @@ public class StepDefinitions
             BigDecimal actualBalance = account.getBalance();
             assertEquals(expectedBalance, actualBalance);
         }
-        catch (BankServiceException e)
+        catch (BankServiceException_Exception e)
         {
-            e.getErrorMessage();
+            e.getMessage();
         }
     }
 
@@ -177,5 +177,14 @@ public class StepDefinitions
         BigDecimal amount = new BigDecimal(100);
         boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, amount, "test");
         assertFalse(isPaymentGranted);
+    }
+
+    @After
+    public void doSomethingAfter() throws BankServiceException_Exception
+    {
+        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
+        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
+        bankFactory.getBank().retireAccount(customerAccount);
+        bankFactory.getBank().retireAccount(merchantAccount);
     }
 }
