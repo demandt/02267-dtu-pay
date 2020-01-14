@@ -137,13 +137,12 @@ public class StepDefinitions
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(100);
         transactionID = dtuPay.performPayment(customer, merchant, token, amount, "test");
-        assertNull(transactionID);
+        assertNotNull(transactionID);
     }
 
     @And("^the customer get a receipt for an amount of money equal to the payment$")
     public void theCustomerGetAReceiptForAnAmountOfMoneyEqualToThePayment() {
-        assertEquals(customer.);
-
+        assertNotNull(customer.getReceipts().get(transactionID));
     }
 
     @Then("the correct amount is transferred from customer to merchant")
@@ -181,8 +180,8 @@ public class StepDefinitions
     {
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(100);
-        boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, amount, "test");
-        assertFalse(isPaymentGranted);
+        transactionID = dtuPay.performPayment(customer, merchant, token, amount, "test");
+        assertNotNull(transactionID);
     }
 
 //    @After
@@ -199,8 +198,8 @@ public class StepDefinitions
 
     @Given("^a customer with account \"([^\"]*)\" applies for a refund of amount (\\d+)$")
     public void aCustomerWithAccountAppliesForARefundOfAmount(String arg0, int arg1) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        String cprNumber = testHelper.getBankCustomer().getCprNumber();
+        Account account = testHelper.getAccount(cprNumber);
     }
 
     @When("^the customer has a valid receipt of amount (\\d+)$")
