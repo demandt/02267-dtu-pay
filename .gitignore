@@ -1,7 +1,5 @@
 .DS_Store
 .idea
 target
-bank
 out
 *.iml
-*.zip
