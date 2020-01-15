@@ -282,4 +282,20 @@ public class StepDefinitions
         BigDecimal amount = new BigDecimal(2000);
         assertFalse(dtuPay.performPayment(customer, merchant, token, amount, amount, "test"));
     }
+
+    @Given("^a customer with account \"([^\"]*)\" has been added to the system$")
+    public void aCustomerWithAccountHasBeenAddedToTheSystem(String arg0) throws Throwable {
+        //Customer myCustomer = new Customer("daniel", "aisen", "s171206@student.dtu.dk")
+    }
+
+    @When("^the customer had an typing error when added to the system$")
+    public void theCustomerHadAnTypingErrorWhenAddedToTheSystem() {
+
+    }
+
+    @Then("^the DTUpay would correct his information$")
+    public void theDTUpayWouldCorrectHisInformation() {
+    }
+
+
 }
