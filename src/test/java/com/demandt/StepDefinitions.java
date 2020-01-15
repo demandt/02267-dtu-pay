@@ -278,7 +278,7 @@ public class StepDefinitions
 
     @Given("^a customer with account \"([^\"]*)\" has been added to the system$")
     public void aCustomerWithAccountHasBeenAddedToTheSystem(String arg0) throws Throwable {
-        Customer myCustomer = new Customer("daniel", "aisen", "s171206@student.dtu.dk")
+        //Customer myCustomer = new Customer("daniel", "aisen", "s171206@student.dtu.dk")
     }
 
     @When("^the customer had an typing error when added to the system$")
