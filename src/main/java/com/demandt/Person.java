@@ -1,19 +1,34 @@
 package com.demandt;
 
+import cucumber.api.java.hu.Ha;
+
+import java.math.BigDecimal;
+import java.util.*;
+
 public class Person
 {
-    public Person(String firstName, String lastName, String cprNumber, Address address)
-    {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.cprNumber = cprNumber;
-        this.address = address;
-    }
 
     private String firstName;
     private String lastName;
     private String cprNumber;
     private Address address;
+    private HashMap<UUID, BigDecimal> receipts;
+
+    public Person(String firstName, String lastName, String cprNumber, Address address, HashMap<UUID, BigDecimal> receipts) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cprNumber = cprNumber;
+        this.address = address;
+        this.receipts = receipts;
+    }
+
+    public Person(String firstName, String lastName, String cprNumber, Address address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cprNumber = cprNumber;
+        this.address = address;
+        this.receipts = new LinkedHashMap<>();
+    }
 
     public Address getAddress()
     {
@@ -53,5 +68,9 @@ public class Person
     public void setAddress(Address address)
     {
         this.address = address;
+    }
+
+    public HashMap<UUID, BigDecimal> getReceipts() {
+        return receipts;
     }
 }

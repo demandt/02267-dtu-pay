@@ -1,5 +1,6 @@
 package com.demandt;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.en.*;
 import com.demandt.services.bank.*;
@@ -18,6 +19,11 @@ public class StepDefinitions
     private BankFactory bankFactory = new BankFactory();
     private DTUPay dtuPay = new DTUPay(bankFactory);
     private TestHelper testHelper = new TestHelper(dtuPay, bankFactory);
+    private Customer customer = dtuPay.getCustomers().get(0);
+    private Merchant merchant = dtuPay.getMerchants().get(0);
+    private UUID transactionID;
+    private int noOfTransactions = 0;
+    private UUID fakeToken = UUID.randomUUID();
     private Customer customer = dtuPay.getCustomers().get("456789-1234");
     private Merchant merchant = dtuPay.getMerchants().get("456789-3456");
 
@@ -147,6 +153,15 @@ public class StepDefinitions
         Date to = sdformat.parse("2020-01-16");
         dtuPay.listCustomerTransactions(customer, from, to);
         assertTrue(isPaymentGranted);
+        BigDecimal amount = new BigDecimal(100);
+
+        assertTrue(dtuPay.performPayment(customer, merchant, token, amount, "test"));
+        noOfTransactions++;
+    }
+
+    @And("^the customer get a receipt for an amount of money equal to the payment$")
+    public void theCustomerGetAReceiptForAnAmountOfMoneyEqualToThePayment() {
+        assertEquals(customer.getReceipts().size(), noOfTransactions);
     }
 
     @Then("the correct amount is transferred from customer to merchant")
@@ -174,7 +189,6 @@ public class StepDefinitions
         assertTrue(isTokenUsed);
 
         TokenManager.getInstance().getGeneratedTokens().remove(usedToken);
-        UUID fakeToken = UUID.randomUUID();
         boolean isTokenFake = TokenManager.getInstance().getGeneratedTokens().contains(fakeToken);
         assertFalse(isTokenFake);
     }
@@ -182,6 +196,7 @@ public class StepDefinitions
     @Then("the payment will fail")
     public void the_payment_will_fail()
     {
+        transactionID = null;
         UUID token = customer.getTokens().get(0);
         BigDecimal givenAmount = new BigDecimal(100);
         BigDecimal wantedAmount = new BigDecimal(100);
@@ -189,12 +204,83 @@ public class StepDefinitions
         assertFalse(isPaymentGranted);
     }
 
-//    @After
-//    public void removeAddedAcounts() throws BankServiceException_Exception
-//    {
-//        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
-//        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
-//        bankFactory.getBank().retireAccount(customerAccount);
-//        bankFactory.getBank().retireAccount(merchantAccount);
-//    }
+    @After
+    public void doSomethingAfter() throws BankServiceException_Exception
+    {
+        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
+        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
+        bankFactory.getBank().retireAccount(customerAccount);
+        bankFactory.getBank().retireAccount(merchantAccount);
+    }
+
+
+    // ------------------ refund steps ---------------------
+
+    @Given("^a customer with account \"([^\"]*)\" applies for a refund of amount (\\d+)$")
+    public void aCustomerWithAccountAppliesForARefundOfAmount(String arg0, int arg1) throws Throwable {
+        assertTrue(testHelper.createPayment(customer, merchant));
+    }
+
+    @When("^the customer has a valid receipt of amount (\\d+)$")
+    public void theCustomerHasAValidReceiptOfAmount(int arg0) {
+        noOfTransactions++;
+        assertEquals(customer.getReceipts().size(), noOfTransactions);
+        assertEquals(merchant.getTransactions().size(), noOfTransactions);
+        assertEquals(dtuPay.getAuthorizedTransactions().size(), noOfTransactions);
+    }
+
+    @Then("^the merchant will transfer (\\d+) from the merchants account \"([^\"]*)\" to the customers account \"([^\"]*)\"$")
+    public void theMerchantWillTransferFromTheMerchantsAccountToTheCustomersAccount(int arg0, String arg1, String arg2) throws Throwable {
+        assertTrue(customer.applyForRefund(dtuPay, merchant, merchant.getTransactions().iterator().next()));
+    }
+
+    @When("^the customer does not have a valid receipt of amount (\\d+)$")
+    public void theCustomerDoesNotHaveAValidReceiptOfAmount(int arg0) {
+        assertFalse(dtuPay.getAuthorizedTransactions().contains(fakeToken));
+    }
+
+    @Then("^the merchant will deny the refund$")
+    public void theMerchantWillDenyTheRefund() {
+        assertFalse(customer.applyForRefund(dtuPay, merchant, fakeToken));
+    }
+
+
+    @And("^the customer's balance stays the same$")
+    public void theCustomerSBalanceStaysTheSame() {
+        try
+        {
+            String cprNumber = testHelper.getBankCustomer().getCprNumber();
+            Account account = testHelper.getAccount(cprNumber);
+            BigDecimal expectedBalance = new BigDecimal(1000);
+            BigDecimal actualBalance = account.getBalance();
+            assertEquals(expectedBalance, actualBalance);
+        }
+        catch (BankServiceException_Exception e)
+        {
+            e.getMessage();
+        }
+    }
+
+    @And("^the merchant's balance stays the same$")
+    public void theMerchantSBalanceStaysTheSame() {
+        try
+        {
+            String cprNumber = testHelper.getBankMerchant().getCprNumber();
+            Account account = testHelper.getAccount(cprNumber);
+            BigDecimal expectedBalance = new BigDecimal(1000);
+            BigDecimal actualBalance = account.getBalance();
+            assertEquals(expectedBalance, actualBalance);
+        }
+        catch (BankServiceException_Exception e)
+        {
+            e.getMessage();
+        }
+    }
+
+    @And("^the customer does not have enough money$")
+    public void theCustomerDoesNotHaveEnoughMoney() {
+        UUID token = customer.getTokens().get(0);
+        BigDecimal amount = new BigDecimal(2000);
+        assertFalse(dtuPay.performPayment(customer, merchant, token, amount, "test"));
+    }
 }

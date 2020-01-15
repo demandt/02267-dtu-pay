@@ -14,12 +14,16 @@ public class DTUPay implements IDTUPay
     private BankService bank;
     private HashMap<String, Customer> customers;
     private HashMap<String, Merchant> merchants;
+    private List<UUID> authorizedTransactions;
+    private Utils utils;
 
     public DTUPay(BankFactory bankFactory)
     {
         this.bank = bankFactory.getBank();
         customers = new HashMap<>();
         merchants = new HashMap<>();
+        authorizedTransactions = new ArrayList<>();
+        this.utils = new Utils();
     }
 
     @Override
@@ -32,6 +36,11 @@ public class DTUPay implements IDTUPay
                 Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
                 Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
                 bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), givenAmount, description);
+                bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), amount, description);
+                UUID transaction = utils.generateNewToken();
+                customer.getReceipts().put(transaction, amount);
+                merchant.getTransactions().add(transaction);
+                authorizedTransactions.add(transaction);
                 return true;
             }
             catch (BankServiceException_Exception e)
@@ -129,6 +138,33 @@ public class DTUPay implements IDTUPay
         }
         return false;
     }
+    public boolean performRefund(Customer customer, Merchant merchant, UUID transactionID, BigDecimal amount) {
+        if(checkTransaction(transactionID)) {
+            try
+            {
+                Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
+                Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
+                bank.transferMoneyFromTo(merchantAccount.getId(), customerAccount.getId(), amount, "refund");
+                UUID transaction = utils.generateNewToken();
+                customer.getReceipts().remove(transaction);
+                merchant.getTransactions().remove(transaction);
+                authorizedTransactions.remove(transaction);
+                return true;
+            }
+            catch (BankServiceException_Exception e)
+            {
+                e.getMessage();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkTransaction(UUID transactionID) {
+        return authorizedTransactions.contains(transactionID);
+    }
+
+    public List<Customer> getCustomers() { return customers; }
 
     @Override
     public boolean updateMerchant(Merchant m)
