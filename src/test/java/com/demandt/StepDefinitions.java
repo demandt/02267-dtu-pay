@@ -146,6 +146,7 @@ public class StepDefinitions
         Date from = sdformat.parse("2020-01-14");
         Date to = sdformat.parse("2020-01-16");
         dtuPay.listCustomerTransactions(customer, from, to);
+        dtuPay.listMerchantTransaction(merchant, from, to);
         assertTrue(isPaymentGranted);
     }
 

@@ -32,6 +32,11 @@ public class DTUPay implements IDTUPay
                 Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
                 Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
                 bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), givenAmount, description);
+                Date date = HelperMethods.getToday();
+                Payment customerReceipt = new Payment(token, merchant, givenAmount, date);
+                Payment merchantReceipt = new Payment(token, customer, givenAmount, date);
+                merchant.getPayments().add(merchantReceipt);
+                customer.getPayments().add(customerReceipt);
                 return true;
             }
             catch (BankServiceException_Exception e)
@@ -45,37 +50,51 @@ public class DTUPay implements IDTUPay
 
     public void listCustomerTransactions(Customer customer, Date from, Date to)
     {
-        try
+        for (Payment payment : customer.getPayments())
         {
-            Account a = bank.getAccountByCprNumber(customer.getCprNumber());
-            List<Transaction> transactionList = a.getTransactions();
-            for (Transaction transaction : transactionList)
+            Date transactionTime = payment.getDate();
+
+            if (isDateValid(from, to, transactionTime))
             {
-                Date transactionTime = HelperMethods.XMLGregorianCalendarToDate(transaction.getTime());
-                if (isDateValid(from, to, transactionTime))
+                for (Payment p : customer.getPayments())
                 {
-                    for (Transaction trans : transactionList)
-                    {
-                        printTransaction(trans);
-                    }
+                    printCustomerTransaction(p);
                 }
             }
         }
-        catch (BankServiceException_Exception e)
+    }
+
+    public void listMerchantTransaction(Merchant merchant, Date from, Date to)
+    {
+        for (Payment payment : merchant.getPayments())
         {
-            e.getMessage();
+            Date transactionTime = payment.getDate();
+
+            if (isDateValid(from, to, transactionTime))
+            {
+                for (Payment p : merchant.getPayments())
+                {
+                    printMerchantTransaction(p);
+                }
+            }
         }
     }
 
-    private void printTransaction(Transaction trans)
+    private void printMerchantTransaction(Payment payment)
     {
         System.out.println("Transaction information");
         System.out.println("=======================");
-        System.out.println("Debtor:       " + trans.getDebtor());
-        System.out.println("Creditor:     " + trans.getCreditor());
-        System.out.println("Amount:       " + trans.getAmount());
-        System.out.println("Time:         " + trans.getTime());
-        System.out.println("Description:  " + trans.getDescription());
+        System.out.println("Amount: " + payment.getAmount());
+        System.out.println("Token:  " + payment.getToken());
+    }
+
+    private void printCustomerTransaction(Payment payment)
+    {
+        System.out.println("Transaction information");
+        System.out.println("=======================");
+        System.out.println("Merchant: " + payment.getMerchant().getStoreName());
+        System.out.println("Amount:   " + payment.getAmount());
+        System.out.println("Token:    " + payment.getToken());
     }
 
     private boolean isDateValid(Date from, Date to, Date transactionTime)
