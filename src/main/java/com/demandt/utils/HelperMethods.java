@@ -2,7 +2,9 @@ package com.demandt.utils;
 
 import com.demandt.Customer;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 public class HelperMethods
@@ -11,6 +13,12 @@ public class HelperMethods
     {
         return wantedAmount.compareTo(givenAmount) < 0 || wantedAmount.compareTo(givenAmount) == 0;
     }
+
+    public static Date XMLGregorianCalendarToDate(XMLGregorianCalendar calendar)
+    {
+        return calendar.toGregorianCalendar().getTime();
+    }
+
 
     public static UUID generateUuid()
     {

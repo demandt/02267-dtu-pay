@@ -5,6 +5,10 @@ import cucumber.api.java.en.*;
 import com.demandt.services.bank.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -132,12 +136,16 @@ public class StepDefinitions
     }
 
     @Then("the payment succeeds")
-    public void the_payment_succeeds()
+    public void the_payment_succeeds() throws BankServiceException_Exception, ParseException
     {
         UUID token = customer.getTokens().get(0);
         BigDecimal givenAmount = new BigDecimal(100);
         BigDecimal wantedAmount = new BigDecimal(100);
         boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, wantedAmount, givenAmount, "test");
+        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+        Date from = sdformat.parse("2020-01-14");
+        Date to = sdformat.parse("2020-01-16");
+        dtuPay.listCustomerTransactions(customer, from, to);
         assertTrue(isPaymentGranted);
     }
 
@@ -181,12 +189,12 @@ public class StepDefinitions
         assertFalse(isPaymentGranted);
     }
 
-    @After
-    public void removeAddedAcounts() throws BankServiceException_Exception
-    {
-        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
-        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
-        bankFactory.getBank().retireAccount(customerAccount);
-        bankFactory.getBank().retireAccount(merchantAccount);
-    }
+//    @After
+//    public void removeAddedAcounts() throws BankServiceException_Exception
+//    {
+//        String customerAccount = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber()).getId();
+//        String merchantAccount = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid()).getId();
+//        bankFactory.getBank().retireAccount(customerAccount);
+//        bankFactory.getBank().retireAccount(merchantAccount);
+//    }
 }

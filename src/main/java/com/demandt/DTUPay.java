@@ -3,11 +3,11 @@ package com.demandt;
 import com.demandt.services.bank.Account;
 import com.demandt.services.bank.BankService;
 import com.demandt.services.bank.BankServiceException_Exception;
+import com.demandt.services.bank.Transaction;
 import com.demandt.utils.HelperMethods;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class DTUPay implements IDTUPay
 {
@@ -41,6 +41,46 @@ public class DTUPay implements IDTUPay
             }
         }
         return false;
+    }
+
+    public void listCustomerTransactions(Customer customer, Date from, Date to)
+    {
+        try
+        {
+            Account a = bank.getAccountByCprNumber(customer.getCprNumber());
+            List<Transaction> transactionList = a.getTransactions();
+            for (Transaction transaction : transactionList)
+            {
+                Date transactionTime = HelperMethods.XMLGregorianCalendarToDate(transaction.getTime());
+                if (isDateValid(from, to, transactionTime))
+                {
+                    for (Transaction trans : transactionList)
+                    {
+                        printTransaction(trans);
+                    }
+                }
+            }
+        }
+        catch (BankServiceException_Exception e)
+        {
+            e.getMessage();
+        }
+    }
+
+    private void printTransaction(Transaction trans)
+    {
+        System.out.println("Transaction information");
+        System.out.println("=======================");
+        System.out.println("Debtor:       " + trans.getDebtor());
+        System.out.println("Creditor:     " + trans.getCreditor());
+        System.out.println("Amount:       " + trans.getAmount());
+        System.out.println("Time:         " + trans.getTime());
+        System.out.println("Description:  " + trans.getDescription());
+    }
+
+    private boolean isDateValid(Date from, Date to, Date transactionTime)
+    {
+        return !transactionTime.before(from) && !transactionTime.after(to);
     }
 
     public boolean verifyTransaction(BigDecimal wantedAmount, BigDecimal givenAmount)
