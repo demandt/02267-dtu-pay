@@ -14,13 +14,13 @@ public class Person
     private Address address;
     private HashMap<UUID, BigDecimal> receipts;
 
-    public Person(String firstName, String lastName, String cprNumber, Address address, HashMap<UUID, BigDecimal> receipts) {
+    /* public Person(String firstName, String lastName, String cprNumber, Address address, HashMap<UUID, BigDecimal> receipts) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.cprNumber = cprNumber;
         this.address = address;
         this.receipts = receipts;
-    }
+    } */
 
     public Person(String firstName, String lastName, String cprNumber, Address address) {
         this.firstName = firstName;

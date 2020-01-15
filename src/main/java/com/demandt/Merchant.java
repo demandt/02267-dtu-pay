@@ -10,9 +10,9 @@ public class Merchant extends Store
         super(name, address, email, uuid, owner);
     }
 
-    public Merchant(String storeName, Address address, String email, String uuid, List<UUID> transactions) {
-        super(storeName, address, email, uuid, transactions);
-    }
+ //   public Merchant(String storeName, Address address, String email, String uuid, List<UUID> transactions) {
+  //      super(storeName, address, email, uuid, transactions);
+   // }
 
     public boolean scanToken(UUID token)
     {

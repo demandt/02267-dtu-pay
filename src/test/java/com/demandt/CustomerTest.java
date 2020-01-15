@@ -18,7 +18,8 @@ public class CustomerTest {
 
     @Test
     public void getEmail() {
-        assertEquals(customer.getEmail(), "test@mail.dk");
+        assertEquals(dtuPay.getCustomers().get("456789-1234").getEmail(),
+                "test@mail.dk");
     }
 
     @Test
