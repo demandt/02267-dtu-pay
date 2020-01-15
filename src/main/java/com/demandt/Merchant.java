@@ -10,9 +10,13 @@ public class Merchant extends Store
     {
         super(name, address, email, uuid, owner);
         payments = new ArrayList<>();
+        transactions = new ArrayList<>();
     }
 
     private List<Payment> payments;
+    private List<UUID> transactions;
+
+    public List<UUID> getTransactions() { return transactions; }
 
     public List<Payment> getPayments()
     {

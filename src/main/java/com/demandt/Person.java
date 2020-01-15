@@ -2,6 +2,12 @@ package com.demandt;
 
 public class Person
 {
+
+    private String firstName;
+    private String lastName;
+    private String cprNumber;
+    private Address address;
+
     public Person(String firstName, String lastName, String cprNumber, Address address)
     {
         this.firstName = firstName;
@@ -9,11 +15,6 @@ public class Person
         this.cprNumber = cprNumber;
         this.address = address;
     }
-
-    private String firstName;
-    private String lastName;
-    private String cprNumber;
-    private Address address;
 
     public Address getAddress()
     {

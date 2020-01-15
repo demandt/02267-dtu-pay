@@ -3,7 +3,6 @@ package com.demandt;
 import com.demandt.services.bank.Account;
 import com.demandt.services.bank.BankService;
 import com.demandt.services.bank.BankServiceException_Exception;
-import com.demandt.services.bank.Transaction;
 import com.demandt.utils.HelperMethods;
 
 import java.math.BigDecimal;
@@ -14,12 +13,19 @@ public class DTUPay implements IDTUPay
     private BankService bank;
     private HashMap<String, Customer> customers;
     private HashMap<String, Merchant> merchants;
+    private List<UUID> authorizedTransactions;
+
+    public List<UUID> getAuthorizedTransactions()
+    {
+        return authorizedTransactions;
+    }
 
     public DTUPay(BankFactory bankFactory)
     {
         this.bank = bankFactory.getBank();
         customers = new HashMap<>();
         merchants = new HashMap<>();
+        authorizedTransactions = new ArrayList<>();
     }
 
     @Override
@@ -37,6 +43,10 @@ public class DTUPay implements IDTUPay
                 Payment merchantReceipt = new Payment(token, customer, givenAmount, date);
                 merchant.getPayments().add(merchantReceipt);
                 customer.getPayments().add(customerReceipt);
+                UUID transaction = HelperMethods.generateNewToken();
+                customer.getReceipts().put(transaction, givenAmount);
+                merchant.getTransactions().add(transaction);
+                authorizedTransactions.add(transaction);
                 return true;
             }
             catch (BankServiceException_Exception e)
@@ -149,6 +159,38 @@ public class DTUPay implements IDTUPay
         return false;
     }
 
+    public boolean performRefund(Customer customer, Merchant merchant, UUID transactionID, BigDecimal amount)
+    {
+        if (checkTransaction(transactionID))
+        {
+            try
+            {
+                Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
+                Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
+                bank.transferMoneyFromTo(merchantAccount.getId(), customerAccount.getId(), amount, "refund");
+                UUID transaction = HelperMethods.generateNewToken();
+                customer.getReceipts().remove(transaction);
+                merchant.getTransactions().remove(transaction);
+                authorizedTransactions.remove(transaction);
+                return true;
+            }
+            catch (BankServiceException_Exception e)
+            {
+                e.getMessage();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkTransaction(UUID transactionID)
+    {
+        return authorizedTransactions.contains(transactionID);
+    }
+
+    public HashMap<String, Customer> getCustomers() { return customers; }
+
+
     @Override
     public boolean updateMerchant(Merchant m)
     {
@@ -170,8 +212,6 @@ public class DTUPay implements IDTUPay
     {
         return merchants.containsKey(merchant.getUuid());
     }
-
-    public HashMap<String, Customer> getCustomers() { return customers; }
 
     public HashMap<String, Merchant> getMerchants() { return merchants; }
 }

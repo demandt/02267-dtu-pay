@@ -9,6 +9,14 @@ Feature: Payment request
     Given the customer has one unused token
     When  the merchant scans a token to receive payment
     Then  the payment succeeds
+    And the customer get a receipt for an amount of money equal to the payment
     Then  the correct amount is transferred from customer to merchant
     But   if the token has already been used or is not known to the system
     Then  the payment will fail
+
+  Scenario: The customer does not have enough money
+    Given the customer has one unused token
+    When the merchant scans a token to receive payment
+    And the customer does not have enough money
+    Then the customer's balance stays the same
+    And the merchant's balance stays the same

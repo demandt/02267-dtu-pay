@@ -48,6 +48,11 @@ public class TestHelper
         return user;
     }
 
+    public boolean createPayment(Customer customer, Merchant merchant) {
+        TokenManager.getInstance().issueToken(customer, 1);
+        return dtuPay.performPayment(customer, merchant, customer.getTokens().get(0), BigDecimal.valueOf(0), BigDecimal.valueOf(0), "setup");
+    }
+
     private DTUPay dtuPay;
     private BankService bank;
 }
