@@ -1,5 +1,7 @@
 package com.demandt;
 
+import com.demandt.utils.HelperMethods;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -46,7 +48,7 @@ public class TokenManager
     {
         for (int i = 0; i < tokens; i++)
         {
-            UUID token = utils.generateNewToken();
+            UUID token = HelperMethods.generateNewToken();
             addToUnusedTokens(token, this.unusedTokens);
             addToGeneratedTokens(token, this.generatedTokens);
             customer.getTokens().add(token);

@@ -36,4 +36,9 @@ public class HelperMethods
         System.out.println("E-mail:     " + customer.getEmail());
         System.out.println("CPR:        " + customer.getCprNumber());
     }
+
+    public static UUID generateNewToken()
+    {
+        return UUID.randomUUID();
+    }
 }

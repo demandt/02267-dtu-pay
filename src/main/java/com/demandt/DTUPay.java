@@ -17,6 +17,10 @@ public class DTUPay implements IDTUPay
     private List<UUID> authorizedTransactions;
     private Utils utils;
 
+    public List<UUID> getAuthorizedTransactions() {
+        return authorizedTransactions;
+    }
+
     public DTUPay(BankFactory bankFactory)
     {
         this.bank = bankFactory.getBank();
@@ -36,9 +40,8 @@ public class DTUPay implements IDTUPay
                 Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
                 Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
                 bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), givenAmount, description);
-                bank.transferMoneyFromTo(customerAccount.getId(), merchantAccount.getId(), amount, description);
-                UUID transaction = utils.generateNewToken();
-                customer.getReceipts().put(transaction, amount);
+                UUID transaction = HelperMethods.generateNewToken();
+                customer.getReceipts().put(transaction, givenAmount);
                 merchant.getTransactions().add(transaction);
                 authorizedTransactions.add(transaction);
                 return true;
@@ -145,7 +148,7 @@ public class DTUPay implements IDTUPay
                 Account customerAccount = bank.getAccountByCprNumber(customer.getCprNumber());
                 Account merchantAccount = bank.getAccountByCprNumber(merchant.getUuid());
                 bank.transferMoneyFromTo(merchantAccount.getId(), customerAccount.getId(), amount, "refund");
-                UUID transaction = utils.generateNewToken();
+                UUID transaction = HelperMethods.generateNewToken();
                 customer.getReceipts().remove(transaction);
                 merchant.getTransactions().remove(transaction);
                 authorizedTransactions.remove(transaction);
@@ -164,7 +167,8 @@ public class DTUPay implements IDTUPay
         return authorizedTransactions.contains(transactionID);
     }
 
-    public List<Customer> getCustomers() { return customers; }
+    public HashMap<String, Customer> getCustomers() { return customers; }
+
 
     @Override
     public boolean updateMerchant(Merchant m)
@@ -187,8 +191,6 @@ public class DTUPay implements IDTUPay
     {
         return merchants.containsKey(merchant.getUuid());
     }
-
-    public HashMap<String, Customer> getCustomers() { return customers; }
 
     public HashMap<String, Merchant> getMerchants() { return merchants; }
 }

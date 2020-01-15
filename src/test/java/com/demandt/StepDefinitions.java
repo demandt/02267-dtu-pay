@@ -19,8 +19,6 @@ public class StepDefinitions
     private BankFactory bankFactory = new BankFactory();
     private DTUPay dtuPay = new DTUPay(bankFactory);
     private TestHelper testHelper = new TestHelper(dtuPay, bankFactory);
-    private Customer customer = dtuPay.getCustomers().get(0);
-    private Merchant merchant = dtuPay.getMerchants().get(0);
     private UUID transactionID;
     private int noOfTransactions = 0;
     private UUID fakeToken = UUID.randomUUID();
@@ -145,17 +143,13 @@ public class StepDefinitions
     public void the_payment_succeeds() throws BankServiceException_Exception, ParseException
     {
         UUID token = customer.getTokens().get(0);
-        BigDecimal givenAmount = new BigDecimal(100);
-        BigDecimal wantedAmount = new BigDecimal(100);
-        boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, wantedAmount, givenAmount, "test");
         SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
         Date from = sdformat.parse("2020-01-14");
         Date to = sdformat.parse("2020-01-16");
         dtuPay.listCustomerTransactions(customer, from, to);
-        assertTrue(isPaymentGranted);
         BigDecimal amount = new BigDecimal(100);
 
-        assertTrue(dtuPay.performPayment(customer, merchant, token, amount, "test"));
+        assertTrue(dtuPay.performPayment(customer, merchant, token, amount, amount, "test"));
         noOfTransactions++;
     }
 
@@ -249,8 +243,7 @@ public class StepDefinitions
     public void theCustomerSBalanceStaysTheSame() {
         try
         {
-            String cprNumber = testHelper.getBankCustomer().getCprNumber();
-            Account account = testHelper.getAccount(cprNumber);
+            Account account = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber());
             BigDecimal expectedBalance = new BigDecimal(1000);
             BigDecimal actualBalance = account.getBalance();
             assertEquals(expectedBalance, actualBalance);
@@ -265,8 +258,7 @@ public class StepDefinitions
     public void theMerchantSBalanceStaysTheSame() {
         try
         {
-            String cprNumber = testHelper.getBankMerchant().getCprNumber();
-            Account account = testHelper.getAccount(cprNumber);
+            Account account = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid());
             BigDecimal expectedBalance = new BigDecimal(1000);
             BigDecimal actualBalance = account.getBalance();
             assertEquals(expectedBalance, actualBalance);
@@ -281,6 +273,6 @@ public class StepDefinitions
     public void theCustomerDoesNotHaveEnoughMoney() {
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(2000);
-        assertFalse(dtuPay.performPayment(customer, merchant, token, amount, "test"));
+        assertFalse(dtuPay.performPayment(customer, merchant, token, amount, amount, "test"));
     }
 }
