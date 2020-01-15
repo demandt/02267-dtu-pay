@@ -309,8 +309,8 @@ public class StepDefinitions
 
     @Then("^the DTUpay would correct his information$")
     public void theDTUpayWouldCorrectHisInformation() {
-      //  Address myNewAddress = new Address("krystal gade", 11, 1957, "Denmark");
-      //  assertEquals(dtuPay.getCustomers().get("130494-1234").getAddress(),myNewAddress);
+        Address myNewAddress = new Address("krystal gade", 11, 1957, "Denmark");
+        assertEquals(dtuPay.getCustomers().get("130494-1234").getAddress(),myNewAddress);
         assertEquals(dtuPay.getCustomers().get("130494-1234").getFirstName(),"daniel");
         assertEquals(dtuPay.getCustomers().get("130494-1234").getCprNumber(),"130494-2345");
         assertEquals(dtuPay.getCustomers().get("130494-1234").getLastName(),"aisen2");
