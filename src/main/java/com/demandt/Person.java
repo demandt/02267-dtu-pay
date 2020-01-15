@@ -3,10 +3,7 @@ package com.demandt;
 import cucumber.api.java.hu.Ha;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Person
 {
@@ -30,7 +27,7 @@ public class Person
         this.lastName = lastName;
         this.cprNumber = cprNumber;
         this.address = address;
-        this.receipts = new HashMap<UUID, BigDecimal>();
+        this.receipts = new LinkedHashMap<>();
     }
 
     public Address getAddress()

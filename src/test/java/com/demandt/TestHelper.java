@@ -49,7 +49,7 @@ public class TestHelper
         return user;
     }
 
-    public UUID createPayment(Customer customer, Merchant merchant) {
+    public boolean createPayment(Customer customer, Merchant merchant) {
         TokenManager.getInstance().issueToken(customer, 1);
         return dtuPay.performPayment(customer, merchant, customer.getTokens().get(0), BigDecimal.valueOf(10), "setup");
     }

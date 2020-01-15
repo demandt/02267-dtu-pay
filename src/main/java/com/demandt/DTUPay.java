@@ -26,7 +26,7 @@ public class DTUPay
         this.utils = new Utils();
     }
 
-    public UUID performPayment(Customer customer, Merchant merchant, UUID token, BigDecimal amount, String description)
+    public boolean performPayment(Customer customer, Merchant merchant, UUID token, BigDecimal amount, String description)
     {
         if (merchant.scanToken(token))
         {
@@ -39,15 +39,15 @@ public class DTUPay
                 customer.getReceipts().put(transaction, amount);
                 merchant.getTransactions().add(transaction);
                 authorizedTransactions.add(transaction);
-                return transaction;
+                return true;
             }
             catch (BankServiceException_Exception e)
             {
                 e.getMessage();
-                return null;
+                return false;
             }
         }
-        return null;
+        return false;
     }
 
     public boolean performRefund(Customer customer, Merchant merchant, UUID transactionID, BigDecimal amount) {
