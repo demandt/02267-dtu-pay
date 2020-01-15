@@ -15,7 +15,6 @@ public class DTUPay implements IDTUPay
     private HashMap<String, Customer> customers;
     private HashMap<String, Merchant> merchants;
     private List<UUID> authorizedTransactions;
-    private Utils utils;
 
     public List<UUID> getAuthorizedTransactions() {
         return authorizedTransactions;
@@ -27,7 +26,6 @@ public class DTUPay implements IDTUPay
         customers = new HashMap<>();
         merchants = new HashMap<>();
         authorizedTransactions = new ArrayList<>();
-        this.utils = new Utils();
     }
 
     @Override

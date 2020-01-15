@@ -11,7 +11,6 @@ public class TokenManager
     private ArrayList<UUID> unusedTokens;
     private ArrayList<UUID> usedTokens;
     private ArrayList<UUID> generatedTokens;
-    private Utils utils;
 
     public static TokenManager getInstance()
     {
@@ -33,7 +32,6 @@ public class TokenManager
         unusedTokens = new ArrayList<>();
         usedTokens = new ArrayList<>();
         generatedTokens = new ArrayList<>();
-        utils = new Utils();
     }
 
     public void issueToken(Customer customer, int tokensRequested)
