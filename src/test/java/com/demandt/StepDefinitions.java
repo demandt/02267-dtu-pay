@@ -1,6 +1,5 @@
 package com.demandt;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.en.*;
 import com.demandt.services.bank.*;
@@ -9,7 +8,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -19,7 +17,6 @@ public class StepDefinitions
     private BankFactory bankFactory = new BankFactory();
     private DTUPay dtuPay = new DTUPay(bankFactory);
     private TestHelper testHelper = new TestHelper(dtuPay, bankFactory);
-    private UUID transactionID;
     private int noOfTransactions = 0;
     private UUID fakeToken = UUID.randomUUID();
     private Customer customer = dtuPay.getCustomers().get("456789-1234");
@@ -143,18 +140,21 @@ public class StepDefinitions
     public void the_payment_succeeds() throws BankServiceException_Exception, ParseException
     {
         UUID token = customer.getTokens().get(0);
+        BigDecimal givenAmount = new BigDecimal(100);
+        BigDecimal wantedAmount = new BigDecimal(100);
+        boolean isPaymentGranted = dtuPay.performPayment(customer, merchant, token, wantedAmount, givenAmount, "test");
         SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
         Date from = sdformat.parse("2020-01-14");
         Date to = sdformat.parse("2020-01-16");
         dtuPay.listCustomerTransactions(customer, from, to);
-        BigDecimal amount = new BigDecimal(100);
-
-        assertTrue(dtuPay.performPayment(customer, merchant, token, amount, amount, "test"));
+        dtuPay.listMerchantTransaction(merchant, from, to);
+        assertTrue(isPaymentGranted);
         noOfTransactions++;
     }
 
     @And("^the customer get a receipt for an amount of money equal to the payment$")
-    public void theCustomerGetAReceiptForAnAmountOfMoneyEqualToThePayment() {
+    public void theCustomerGetAReceiptForAnAmountOfMoneyEqualToThePayment()
+    {
         assertEquals(customer.getReceipts().size(), noOfTransactions);
     }
 
@@ -190,7 +190,6 @@ public class StepDefinitions
     @Then("the payment will fail")
     public void the_payment_will_fail()
     {
-        transactionID = null;
         UUID token = customer.getTokens().get(0);
         BigDecimal givenAmount = new BigDecimal(100);
         BigDecimal wantedAmount = new BigDecimal(100);
@@ -211,12 +210,14 @@ public class StepDefinitions
     // ------------------ refund steps ---------------------
 
     @Given("^a customer with account \"([^\"]*)\" applies for a refund of amount (\\d+)$")
-    public void aCustomerWithAccountAppliesForARefundOfAmount(String arg0, int arg1) throws Throwable {
+    public void aCustomerWithAccountAppliesForARefundOfAmount(String arg0, int arg1) throws Throwable
+    {
         assertTrue(testHelper.createPayment(customer, merchant));
     }
 
     @When("^the customer has a valid receipt of amount (\\d+)$")
-    public void theCustomerHasAValidReceiptOfAmount(int arg0) {
+    public void theCustomerHasAValidReceiptOfAmount(int arg0)
+    {
         noOfTransactions++;
         assertEquals(customer.getReceipts().size(), noOfTransactions);
         assertEquals(merchant.getTransactions().size(), noOfTransactions);
@@ -224,23 +225,27 @@ public class StepDefinitions
     }
 
     @Then("^the merchant will transfer (\\d+) from the merchants account \"([^\"]*)\" to the customers account \"([^\"]*)\"$")
-    public void theMerchantWillTransferFromTheMerchantsAccountToTheCustomersAccount(int arg0, String arg1, String arg2) throws Throwable {
+    public void theMerchantWillTransferFromTheMerchantsAccountToTheCustomersAccount(int arg0, String arg1, String arg2) throws Throwable
+    {
         assertTrue(customer.applyForRefund(dtuPay, merchant, merchant.getTransactions().iterator().next()));
     }
 
     @When("^the customer does not have a valid receipt of amount (\\d+)$")
-    public void theCustomerDoesNotHaveAValidReceiptOfAmount(int arg0) {
+    public void theCustomerDoesNotHaveAValidReceiptOfAmount(int arg0)
+    {
         assertFalse(dtuPay.getAuthorizedTransactions().contains(fakeToken));
     }
 
     @Then("^the merchant will deny the refund$")
-    public void theMerchantWillDenyTheRefund() {
+    public void theMerchantWillDenyTheRefund()
+    {
         assertFalse(customer.applyForRefund(dtuPay, merchant, fakeToken));
     }
 
 
     @And("^the customer's balance stays the same$")
-    public void theCustomerSBalanceStaysTheSame() {
+    public void theCustomerSBalanceStaysTheSame()
+    {
         try
         {
             Account account = bankFactory.getBank().getAccountByCprNumber(customer.getCprNumber());
@@ -255,7 +260,8 @@ public class StepDefinitions
     }
 
     @And("^the merchant's balance stays the same$")
-    public void theMerchantSBalanceStaysTheSame() {
+    public void theMerchantSBalanceStaysTheSame()
+    {
         try
         {
             Account account = bankFactory.getBank().getAccountByCprNumber(merchant.getUuid());
@@ -270,7 +276,8 @@ public class StepDefinitions
     }
 
     @And("^the customer does not have enough money$")
-    public void theCustomerDoesNotHaveEnoughMoney() {
+    public void theCustomerDoesNotHaveEnoughMoney()
+    {
         UUID token = customer.getTokens().get(0);
         BigDecimal amount = new BigDecimal(2000);
         assertFalse(dtuPay.performPayment(customer, merchant, token, amount, amount, "test"));

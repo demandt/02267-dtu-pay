@@ -13,19 +13,29 @@ public class Customer extends Person
         super(firstName, lastName, cprNumber, address);
         this.email = email;
         tokens = new ArrayList<>();
+        payments = new ArrayList<>();
+        receipts = new HashMap<>();
     }
 
-    private String email;
-/*    public Customer(String firstName, String lastName, String cprNumber, Address address, HashMap<UUID, BigDecimal> receipts, ArrayList<UUID> tokens) {
-        super(firstName, lastName, cprNumber, address, receipts);
-        this.tokens = tokens;
-    }
-*/
-    public boolean applyForRefund(DTUPay dtuPay, Merchant merchant, UUID transactionID) {
+    public boolean applyForRefund(DTUPay dtuPay, Merchant merchant, UUID transactionID)
+    {
         return dtuPay.performRefund(this, merchant, transactionID, this.getReceipts().get(transactionID));
     }
 
+    private String email;
     private ArrayList<UUID> tokens;
+    private List<Payment> payments;
+    private HashMap<UUID, BigDecimal> receipts;
+
+    public HashMap<UUID, BigDecimal> getReceipts()
+    {
+        return receipts;
+    }
+
+    public List<Payment> getPayments()
+    {
+        return payments;
+    }
 
     public String getEmail() { return email; }
 

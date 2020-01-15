@@ -4,6 +4,7 @@ import com.demandt.Customer;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,6 +20,13 @@ public class HelperMethods
         return calendar.toGregorianCalendar().getTime();
     }
 
+    public static Date getToday()
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        dateFormat.format(date);
+        return date;
+    }
 
     public static UUID generateUuid()
     {

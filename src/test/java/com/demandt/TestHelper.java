@@ -1,10 +1,8 @@
 package com.demandt;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import com.demandt.services.bank.*;
-import jdk.nashorn.internal.parser.Token;
 
 public class TestHelper
 {
