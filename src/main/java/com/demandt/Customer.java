@@ -16,11 +16,11 @@ public class Customer extends Person
     }
 
     private String email;
-    public Customer(String firstName, String lastName, String cprNumber, Address address, HashMap<UUID, BigDecimal> receipts, ArrayList<UUID> tokens) {
+/*    public Customer(String firstName, String lastName, String cprNumber, Address address, HashMap<UUID, BigDecimal> receipts, ArrayList<UUID> tokens) {
         super(firstName, lastName, cprNumber, address, receipts);
         this.tokens = tokens;
     }
-
+*/
     public boolean applyForRefund(DTUPay dtuPay, Merchant merchant, UUID transactionID) {
         return dtuPay.performRefund(this, merchant, transactionID, this.getReceipts().get(transactionID));
     }

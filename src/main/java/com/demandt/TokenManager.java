@@ -107,5 +107,4 @@ public class TokenManager
         return generatedTokens;
     }
 
-    public ArrayList<UUID> getUnusedTokens() { return unusedTokens; }
 }
