@@ -27,14 +27,6 @@ public class HelperMethods
         dateFormat.format(date);
         return date;
     }
-
-    public static UUID generateUuid()
-    {
-        return UUID.randomUUID();
-    }
-
-    public static UUID uuidFromString(String uuid) { return UUID.fromString(uuid); }
-
     public static void printCustomerInformation(Customer customer)
     {
         System.out.println("Customer information");

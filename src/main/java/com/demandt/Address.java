@@ -54,4 +54,22 @@ public class Address
     {
         this.country = country;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        }
+        if(!(obj instanceof Address)) {
+            return false;
+        }
+        Address address = (Address) obj;
+        return address.country.equals(country) && address.postalCode == postalCode
+                && address.streetNumber == streetNumber && address.street.equals(street);
+    }
+
+    @Override
+    public int hashCode() {
+        return country.hashCode() + postalCode + streetNumber + street.hashCode();
+    }
 }
