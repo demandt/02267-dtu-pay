@@ -18,7 +18,6 @@ public class StepDefinitions
     private BankFactory bankFactory = new BankFactory();
     private DTUPay dtuPay = new DTUPay(bankFactory);
     private TestHelper testHelper = new TestHelper(dtuPay, bankFactory);
-    private UUID transactionID;
     private int noOfTransactions = 0;
     private UUID fakeToken = UUID.randomUUID();
     private Customer customer = dtuPay.getCustomers().get("456789-1234");
@@ -189,7 +188,6 @@ public class StepDefinitions
     @Then("the payment will fail")
     public void the_payment_will_fail()
     {
-        transactionID = null;
         UUID token = customer.getTokens().get(0);
         BigDecimal givenAmount = new BigDecimal(100);
         BigDecimal wantedAmount = new BigDecimal(100);
