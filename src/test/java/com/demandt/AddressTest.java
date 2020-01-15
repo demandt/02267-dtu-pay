@@ -58,4 +58,9 @@ public class AddressTest {
         address.setCountry(newCountry);
         assertEquals(address.getCountry(), newCountry);
     }
+
+    @Test
+    public void notAddressObject() {
+        assertFalse(address.equals("string"));
+    }
 }

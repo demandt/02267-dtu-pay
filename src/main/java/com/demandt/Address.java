@@ -68,8 +68,8 @@ public class Address
                 && address.streetNumber == streetNumber && address.street.equals(street);
     }
 
-    @Override
-    public int hashCode() {
-        return country.hashCode() + postalCode + streetNumber + street.hashCode();
-    }
+//    @Override
+//    public int hashCode() {
+//        return country.hashCode() + postalCode + streetNumber + street.hashCode();
+//    }
 }

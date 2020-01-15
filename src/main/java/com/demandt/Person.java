@@ -15,12 +15,6 @@ public class Person
         this.cprNumber = cprNumber;
         this.address = address;
     }
-
-    public Address getAddress()
-    {
-        return address;
-    }
-
     public String getFirstName()
     {
         return firstName;
@@ -31,8 +25,7 @@ public class Person
         return lastName;
     }
 
-    public String getCprNumber()
-    {
+    public String getCprNumber()     {
         return cprNumber;
     }
 

@@ -38,10 +38,10 @@ public class Payment
         return merchant;
     }
 
-    public Customer getCustomer()
-    {
-        return customer;
-    }
+//    public Customer getCustomer()
+//    {
+//        return customer;
+//    }
 
     public BigDecimal getAmount()
     {

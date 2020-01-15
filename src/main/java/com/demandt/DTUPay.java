@@ -135,7 +135,7 @@ public class DTUPay implements IDTUPay
         {
             customer.setFirstName(customer.getFirstName());
             customer.setLastName(customer.getLastName());
-            customer.setAddress(customer.getAddress());
+            //customer.setAddress(customer.getAddress());
             customer.setCprNumber(customer.getCprNumber());
             return true;
         }
