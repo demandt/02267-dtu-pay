@@ -276,18 +276,37 @@ public class StepDefinitions
         assertFalse(dtuPay.performPayment(customer, merchant, token, amount, amount, "test"));
     }
 
-    @Given("^a customer with account \"([^\"]*)\" has been added to the system$")
-    public void aCustomerWithAccountHasBeenAddedToTheSystem(String arg0) throws Throwable {
-        //Customer myCustomer = new Customer("daniel", "aisen", "s171206@student.dtu.dk")
+    @Given("^a customer been added to the system$")
+    public void aCustomerBeenAddedToTheSystem() {
+        Address myAddress = new Address("jagtvej", 111, 2200, "Denmark");
+        Customer danielAisen = new Customer("danie", "aisen", "s171206@student.dtu.dk","130494-1234",myAddress);
+        dtuPay.registerCustomer(danielAisen);
+       // dtuPay.getCustomers().get("130494-1234").getAddress();
     }
+
 
     @When("^the customer had an typing error when added to the system$")
     public void theCustomerHadAnTypingErrorWhenAddedToTheSystem() {
+        Address myAddress = new Address("jagtvej", 111, 2200, "Denmark");
+      //  assertEquals(dtuPay.getCustomers().get("130494-1234").getAddress(),myAddress);
+        assertEquals(dtuPay.getCustomers().get("130494-1234").getFirstName(),"danie");
+        assertEquals(dtuPay.getCustomers().get("130494-1234").getCprNumber(),"130494-1234");
+        assertEquals(dtuPay.getCustomers().get("130494-1234").getLastName(),"aisen");
+        Address myNewAddress = new Address("krystal gade", 11, 1957, "Denmark");
 
+        dtuPay.getCustomers().get("130494-1234").setFirstName("daniel");
+        dtuPay.getCustomers().get("130494-1234").setLastName("aisen2");
+        dtuPay.getCustomers().get("130494-1234").setCprNumber("130494-2345");
+        dtuPay.getCustomers().get("130494-1234").setAddress(myNewAddress);
     }
 
     @Then("^the DTUpay would correct his information$")
     public void theDTUpayWouldCorrectHisInformation() {
+      //  Address myNewAddress = new Address("krystal gade", 11, 1957, "Denmark");
+      //  assertEquals(dtuPay.getCustomers().get("130494-1234").getAddress(),myNewAddress);
+        assertEquals(dtuPay.getCustomers().get("130494-1234").getFirstName(),"daniel");
+        assertEquals(dtuPay.getCustomers().get("130494-1234").getCprNumber(),"130494-2345");
+        assertEquals(dtuPay.getCustomers().get("130494-1234").getLastName(),"aisen2");
     }
 
 
